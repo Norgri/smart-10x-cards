@@ -1,2 +1,6 @@
 # Ignore mvp high level document
 .ai/mvp-high-level.md
+
+# Ignore learning notes
+.notes/
+
