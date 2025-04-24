@@ -7,10 +7,10 @@ Manualne tworzenie wysokiej jakości fiszek edukacyjnych jest czasochłonne, co 
 - Przeglądanie, edycja i usuwanie fiszek
 - Wyszukiwanie fiszek na podstawie tagów np. rozdział książki, temat
 - Prosty system kont użytkowników do przechowywania fiszek
-- Integracja fiszek z gotowym algorytmem powtórek
 
 
 ### Co NIE wchodzi w zakres MVP
+- Integracja fiszek z gotowym algorytmem powtórek
 - Własny, zaawansowany algorytm powtórek (jak SuperMemo, Anki)
 - Import wielu formatów (PDF, DOCX, itp.)
 - Współdzielenie zestawów fiszek między użytkownikami

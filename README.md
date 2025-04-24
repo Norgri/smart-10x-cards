@@ -1,94 +1,83 @@
-# 10x Astro Starter
+# Smart 10x Cards
 
-A modern, opinionated starter template for building fast, accessible, and AI-friendly web applications.
+## Table of Contents
+- [Project Name](#project-name)
+- [Project Description](#project-description)
+- [Tech Stack](#tech-stack)
+- [Getting Started Locally](#getting-started-locally)
+- [Available Scripts](#available-scripts)
+- [Project Scope](#project-scope)
+- [Project Status](#project-status)
+- [License](#license)
+
+## Project Name
+
+Smart 10x Cards
+
+## Project Description
+
+Smart 10x Cards is a web application designed to automate and simplify the process of creating educational flashcards. It leverages artificial intelligence to generate flashcards from textbook images and offers manual editing features. Key functionalities include user registration, image uploads, AI-driven flashcard generation (including text extraction, translation, and optional phonetics), tag suggestions, as well as manual flashcard management and search capabilities.
 
 ## Tech Stack
 
-- [Astro](https://astro.build/) v5.5.5 - Modern web framework for building fast, content-focused websites
-- [React](https://react.dev/) v19.0.0 - UI library for building interactive components
-- [TypeScript](https://www.typescriptlang.org/) v5 - Type-safe JavaScript
-- [Tailwind CSS](https://tailwindcss.com/) v4.0.17 - Utility-first CSS framework
+- **Frontend:** Astro 5, React 19, TypeScript 5, Tailwind 4, Shadcn/ui
+- **Backend:** Supabase (utilizing PostgreSQL and integrated user authentication)
+- **AI Integration:** OpenRouter for accessing various AI models
+- **CI/CD & Hosting:** GitHub Actions for continuous integration and DigitalOcean for deployment
 
-## Prerequisites
+## Getting Started Locally
 
-- Node.js v22.14.0 (as specified in `.nvmrc`)
-- npm (comes with Node.js)
+Follow these steps to set up the project on your local machine:
 
-## Getting Started
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/Norgri/smart-10x-cards.git
+   cd smart-10x-cards
+   ```
+2. **Use the correct Node version:**
+   The required Node version is specified in the `.nvmrc` file.
+   ```bash
+   fnm use
+   ```
 
-1. Clone the repository:
+3. **Install dependencies:**
+   ```bash
+   npm install
+   ```
 
-```bash
-git clone https://github.com/przeprogramowani/10x-astro-starter.git
-cd 10x-astro-starter
-```
-
-2. Install dependencies:
-
-```bash
-npm install
-```
-
-3. Run the development server:
-
-```bash
-npm run dev
-```
-
-4. Build for production:
-
-```bash
-npm run build
-```
+4. **Start the development server:**
+   ```bash
+   npm run dev
+   ```
+   The application will be available at [http://localhost:3000](http://localhost:3000).
 
 ## Available Scripts
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
-- `npm run lint` - Run ESLint
-- `npm run lint:fix` - Fix ESLint issues
+The following scripts are defined in the `package.json`:
 
-## Project Structure
+- **`npm run dev`**: Starts the development server.
+- **`npm run build`**: Builds the project for production deployment.
+- **`npm run preview`**: Serves the production build locally.
+- *(Additional scripts, such as testing or linting, may be available.)*
 
-```md
-.
-├── src/
-│   ├── layouts/    # Astro layouts
-│   ├── pages/      # Astro pages
-│   │   └── api/    # API endpoints
-│   ├── components/ # UI components (Astro & React)
-│   └── assets/     # Static assets
-├── public/         # Public assets
-```
+## Project Scope
 
-## AI Development Support
+This project focuses on delivering a minimum viable product (MVP) with the following features:
 
-This project is configured with AI development tools to enhance the development experience, providing guidelines for:
+- User registration and authentication
+- Uploading a textbook page image to generate flashcards
+- AI-powered flashcard generation (including text extraction, translation, and optional phonetics)
+- Automatic tag suggestions based on provided prompts
+- Manual creation, editing, and deletion of flashcards
+- Advanced flashcard search and filtering
+- Logging of user interactions and AI actions for analytics
 
-- Project structure
-- Coding practices
-- Frontend development
-- Styling with Tailwind
-- Accessibility best practices
-- Astro and React guidelines
+Future improvements may include additional features and refinements based on user feedback and performance metrics.
 
-### Cursor IDE
+## Project Status
 
-The project includes AI rules in `.cursor/rules/` directory that help Cursor IDE understand the project structure and provide better code suggestions.
-
-### GitHub Copilot
-
-AI instructions for GitHub Copilot are available in `.github/copilot-instructions.md`
-
-### Windsurf
-
-The `.windsurfrules` file contains AI configuration for Windsurf.
-
-## Contributing
-
-Please follow the AI guidelines and coding practices defined in the AI configuration files when contributing to this project.
+The project is currently in the MVP stage and is under active development. Ongoing enhancements and feature additions are planned as the project evolves.
 
 ## License
 
-MIT
+This project is licensed under the MIT License.
