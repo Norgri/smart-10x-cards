@@ -36,6 +36,7 @@ This table is managed by Supabase Auth.
 
 ### 1.4. generation_session
 - **id**: BIGSERIAL PRIMARY KEY
+- **user_id**: UUID REFERENCES users(id) ON DELETE SET NULL
 - **generation_duration**: INTERVAL NOT NULL
 - **model**: VARCHAR(100) NOT NULL
 - **created_at**: TIMESTAMPTZ NOT NULL DEFAULT NOW()
@@ -43,6 +44,7 @@ This table is managed by Supabase Auth.
 
 ### 1.5. log_action
 - **id**: BIGSERIAL PRIMARY KEY
+- **user_id**: UUID REFERENCES users(id) ON DELETE SET NULL
 - **generation_session_id**: BIGINT REFERENCES generation_session(id) ON DELETE SET NULL
 - **flashcard_id**: BIGINT REFERENCES flashcards(id) ON DELETE SET NULL
 - **action_type**: VARCHAR(10) NOT NULL CHECK (action_type IN ('accepted', 'edited', 'deleted'))
@@ -60,6 +62,12 @@ This table is managed by Supabase Auth.
 
 - **users** (1) --- (N) **flashcards**
   - Każdy użytkownik może posiadać wiele fiszek.
+
+- **users** (1) --- (N) **generation_session**
+  - Każdy użytkownik może posiadać wiele sesji generowania.
+
+- **users** (1) --- (N) **log_action**
+  - Każdy użytkownik może mieć wiele akcji logowanych.
 
 - **flashcards** (1) --- (N) **tags**
   - Każda fiszka może mieć przypisane do 4 tagi (walidacja aplikacyjna).
@@ -84,6 +92,12 @@ This table is managed by Supabase Auth.
 - Indeks na kolumnie **flashcard_id** w tabeli `tags`:
   - CREATE INDEX idx_tags_flashcard_id ON tags(flashcard_id);
 
+- Indeks na kolumnie **user_id** w tabeli `generation_session`:
+  - CREATE INDEX idx_generation_session_user_id ON generation_session(user_id);
+
+- Indeks na kolumnie **user_id** w tabeli `log_action`:
+  - CREATE INDEX idx_log_action_user_id ON log_action(user_id);
+
 (Dodatkowe indeksy mogą być dodane w zależności od wzorców zapytań.)
 
 ## 4. Zasady PostgreSQL (Row-Level Security - RLS)
@@ -98,17 +112,24 @@ CREATE POLICY user_flashcards_policy ON flashcards
     USING (user_id = current_setting('app.current_user_id')::uuid);
 ```
 
+### Tabela generation_session
+RLS zostanie włączone, aby ograniczyć dostęp do sesji generowania fiszek tylko do właściciela.
+
+Przykładowa polityka:
+```
+ALTER TABLE generation_session ENABLE ROW LEVEL SECURITY;
+CREATE POLICY user_generation_session_policy ON generation_session
+    USING (user_id = current_setting('app.current_user_id')::uuid);
+```
+
 ### Tabela log_action
-RLS może być zastosowane poprzez weryfikację właściciela poprzez powiązaną fiszkę.
+RLS zostanie włączone, aby ograniczyć dostęp do logów z akcji tylko do właściciela.
 
 Przykładowa polityka:
 ```
 ALTER TABLE log_action ENABLE ROW LEVEL SECURITY;
 CREATE POLICY user_log_action_policy ON log_action
-    USING (
-        flashcard_id IS NULL OR
-        EXISTS (SELECT 1 FROM flashcards WHERE flashcards.id = log_action.flashcard_id AND user_id = current_setting('app.current_user_id')::uuid)
-    );
+    USING (user_id = current_setting('app.current_user_id')::uuid);;
 ```
 
 ## 5. Dodatkowe uwagi
