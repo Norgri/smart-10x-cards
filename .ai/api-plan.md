@@ -97,7 +97,7 @@ Each endpoint will follow RESTful principles using appropriate HTTP methods and 
 - **Generate Flashcards from Image**
   - **Method:** POST
   - **URL:** /api/generation-sessions
-  - **Description:** Initiates an AI generation process by accepting an image upload of a textbook page. This creates a new generation session and returns the generated flashcards.
+  - **Description:** Initiates an AI generation process by accepting an image upload of a textbook page. This creates a new generation session and returns the generated flashcards or errors.
   - **Request Payload:** Multipart/form-data containing:
     - `image`: The image file (JPG or PNG, max file size X MB).
     - (Optional) Other generation parameters.
@@ -105,7 +105,7 @@ Each endpoint will follow RESTful principles using appropriate HTTP methods and 
     ```json
     {
       "generation_session": {
-        "session_id": "session-123",
+        "id": "session-123",
         "flashcards": [
           {
             "id": null,
@@ -116,7 +116,13 @@ Each endpoint will follow RESTful principles using appropriate HTTP methods and 
             "source": "ai"
           }
         ],
-        "status": "pending",
+        "errors": [
+          {
+            "id": 123,
+            "error_code": "Error code of failed generation",
+            "error_message": "Error message"
+          }
+        ],
         "created_at": "2023-10-01T12:00:00Z"
       }
     }
@@ -175,7 +181,7 @@ Each endpoint will follow RESTful principles using appropriate HTTP methods and 
   - **Response Payload:**
     ```json
     {
-      "log_id": 456,
+      "id": 456,
       "session_id": "session-123",
       "action_type": "accepted",
       "timestamp": "2023-10-01T12:05:00Z"
