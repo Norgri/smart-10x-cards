@@ -84,8 +84,6 @@ export interface GenerationSessionDTO {
  */
 export interface GenerateFlashcardsFromImageCommand {
   image: File; // The uploaded image file (JPG or PNG)
-  // Additional optional generation parameters can be included
-  [key: string]: unknown;
 }
 
 /**
@@ -107,7 +105,7 @@ export interface GenerationErrorDTO {
  */
 export interface LogFlashcardActionCommand {
   actionType: "accepted" | "edited" | "rejected";
-  generatedFlashcard: {
+  generatedFlashcard?: {
     front: string;
     back: string;
     phonetic?: string | null;
@@ -123,7 +121,7 @@ export interface LogFlashcardActionCommand {
 export interface LogActionDTO {
   id: number;
   sessionId: string;
-  flashcardId: number;
+  flashcardId?: number;
   actionType: "accepted" | "edited" | "rejected";
   timestamp: string; // Represents when the action was logged
 }
