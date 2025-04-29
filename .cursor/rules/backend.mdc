@@ -13,3 +13,4 @@ alwaysApply: false
 - Use snake case for database.
 - Use camel case for backend objects.
 - Use kebab case for api urls.
+- For services files use following pattern <name>.service.ts
