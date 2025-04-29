@@ -46,7 +46,7 @@ Each endpoint will follow RESTful principles using appropriate HTTP methods and 
   - **Query Parameters:**
     - `page` (number): Page number.
     - `limit` (number): Number of items per page.
-    - `tags` (array of string, optional): Filter flashcards by one or more tags. This parameter can be repeated in the URL, e.g., /api/flashcards?tags=tag1&tags=tag2
+    - `tags` (array of string, optional): Filter flashcards by one or more tags (e.g., /api/flashcards?tags=tag1&tags=tag2).
   - **Response:**
     - 200 OK with a JSON array of flashcards and pagination info.
 
@@ -68,69 +68,96 @@ Each endpoint will follow RESTful principles using appropriate HTTP methods and 
       "front": "Sample front text",
       "back": "Sample back text",
       "phonetic": "Optional phonetic",
-      "tags": ["tag1", "tag2"]  // max 4 tags
+      "tags": ["tag1", "tag2"]
     }
     ```
   - **Response:**
-    - 201 Created with new flashcard details.
-    - Error codes: 400 for validation errors.
+    ```json
+    {
+      "id": 1,
+      "front": "Sample front text",
+      "back": "Sample back text",
+      "phonetic": "Optional phonetic",
+      "source": "manual",
+      "createdAt": "2023-10-01T12:00:00Z",
+      "updatedAt": "2023-10-01T12:00:00Z",
+      "userId": "user-uuid",
+      "tags": ["tag1", "tag2"]
+    }
+    ```
 
 - **Update Flashcard**
   - **Method:** PUT
   - **URL:** /api/flashcards/{id}
-  - **Description:** Updates an existing flashcard (manual or AI-generated) including editing tags.
-  - **Request Payload:** Similar to create payload.
+  - **Description:** Updates an existing flashcard including editing tags.
+  - **Request Payload:**
+    ```json
+    {
+      "id": 1,
+      "front": "Updated front text",
+      "back": "Updated back text",
+      "phonetic": "Optional phonetic",
+      "tags": ["tag1", "tag2"]
+    }
+    ```
   - **Response:**
-    - 200 OK with updated flashcard details.
-    - Error codes: 400 for validation errors, 404 if flashcard not found.
+    ```json
+    {
+      "id": 1,
+      "front": "Updated front text",
+      "back": "Updated back text",
+      "phonetic": "Optional phonetic",
+      "source": "manual",
+      "createdAt": "2023-10-01T12:00:00Z",
+      "updatedAt": "2023-10-01T12:05:00Z",
+      "userId": "user-uuid",
+      "tags": ["tag1", "tag2"]
+    }
+    ```
 
 - **Delete Flashcard**
   - **Method:** DELETE
   - **URL:** /api/flashcards/{id}
-  - **Description:** Deletes a flashcard.
+  - **Description:** Deletes a flashcard identified by its id.
   - **Response:**
-    - 200 OK with confirmation message.
-    - Error codes: 404 if flashcard not found.
+    - 200 OK with a confirmation message.
+    - 404 if flashcard not found.
 
 #### 2. AI-Generated Flashcard Operations
 
 - **Generate Flashcards from Image**
   - **Method:** POST
   - **URL:** /api/generation-sessions
-  - **Description:** Initiates an AI generation process by accepting an image upload of a textbook page. This creates a new generation session and returns the generated flashcards or errors.
-  - **Request Payload:** Multipart/form-data containing:
-    - `image`: The image file (JPG or PNG, max file size X MB).
-    - (Optional) Other generation parameters.
-  - **Response Payload:**
+  - **Description:** Initiates an AI generation process by accepting an image upload. Creates a generation session and returns generated flashcards.
+  - **Request Payload:**
+    - Multipart/form-data containing:
+      - `image`: The image file (JPG or PNG).
+  - **Response:**
     ```json
     {
-      "generation_session": {
-        "id": "session-123",
-        "flashcards": [
-          {
-            "id": null,
-            "front": "Generated front text",
-            "back": "Generated back text",
-            "phonetic": "Optional phonetic",
-            "tags": ["tag1", "tag2"],
-            "source": "ai"
-          }
-        ],
-        "errors": [
-          {
-            "id": 123,
-            "error_code": "Error code of failed generation",
-            "error_message": "Error message"
-          }
-        ],
-        "created_at": "2023-10-01T12:00:00Z"
-      }
+      "id": "session-123",
+      "flashcards": [
+        {
+          "front": "Generated front text",
+          "back": "Generated back text",
+          "phonetic": "Optional phonetic",
+          "tags": ["tag1", "tag2"],
+          "source": "ai"
+        }
+      ],
+      "errors": [
+        {
+          "id": 123,
+          "errorCode": "Error code of failed generation",
+          "errorMessage": "Error message"
+        }
+      ],
+      "createdAt": "2023-10-01T12:00:00Z"
     }
     ```
   - **Validation:**
-    - The image must be in JPG or PNG format.
-    - The file size must not exceed the set limit.
-    - All required parameters (if any) must be provided.
+    - The image must be in JPG or PNG format and within the file size limit.
+    - All required parameters must be provided.
   - **Error Codes:**
     - 400 for invalid file type or missing parameters.
     - 500 for AI processing errors.
@@ -142,15 +169,15 @@ Each endpoint will follow RESTful principles using appropriate HTTP methods and 
   - **URL:** /api/generation-sessions
   - **Description:** Retrieves a list of AI generation sessions for the authenticated user.
   - **Response:**
-    - 200 OK with session data.
+    - 200 OK with the session data.
 
 - **Get Generation Session Details**
   - **Method:** GET
   - **URL:** /api/generation-sessions/{id}
-  - **Description:** Retrieves details of a specific generation session.
+  - **Description:** Retrieves details of a specific generation session along with associated flashcards.
   - **Response:**
-    - 200 OK with session details and associated flashcards.
-    - 404 Not Found if session does not exist.
+    - 200 OK with session details.
+    - 404 if session does not exist.
 
 - **List Generation Errors for a Session**
   - **Method:** GET
@@ -164,12 +191,12 @@ Each endpoint will follow RESTful principles using appropriate HTTP methods and 
 - **Log Generated Flashcard Action**
   - **Method:** POST
   - **URL:** /api/generation-sessions/{session_id}/flashcard-actions
-  - **Description:** Logs a user action (accepted, edited, or rejected) on a generated flashcard associated with the given generation session. This endpoint allows logging actions for generated flashcards, whether or not they are persisted in the database.
+  - **Description:** Logs a user action on a generated flashcard. For 'accepted' or 'edited' actions, a flashcard record is automatically created.
   - **Request Payload:**
     ```json
     {
-      "action_type": "accepted", // must be one of "accepted", "edited", or "rejected"
-      "generated_flashcard": {
+      "actionType": "accepted",
+      "generatedFlashcard": {
         "front": "Generated front text",
         "back": "Generated back text",
         "phonetic": "Optional phonetic",
@@ -178,17 +205,18 @@ Each endpoint will follow RESTful principles using appropriate HTTP methods and 
       }
     }
     ```
-  - **Response Payload:**
+  - **Response:**
     ```json
     {
       "id": 456,
-      "session_id": "session-123",
-      "action_type": "accepted",
+      "sessionId": "session-123",
+      "flashcardId": 789,
+      "actionType": "accepted",
       "timestamp": "2023-10-01T12:05:00Z"
     }
     ```
   - **Validation:**
-    - The `action_type` field must be one of "accepted", "edited", or "rejected".
+    - The `actionType` field must be one of "accepted", "edited", or "rejected".
     - For accepted or edited flashcards, the system will automatically create a record in the `flashcards` table with an auto-generated `id`.
   - **Error Codes:**
     - 400 for invalid action types.
