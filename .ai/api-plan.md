@@ -29,7 +29,7 @@
 6. **GenerationErrors**
    - Maps to the `generation_error` table.
    - Logs errors encountered during AI generation sessions.
-   - Key fields: id, session_id, error_code, error_message, created_at, updated_at.
+   - Key fields: id, session_id, error_code, error_message, created_at.
 
 ## 2. Endpoints
 

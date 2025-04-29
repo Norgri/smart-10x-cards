@@ -96,7 +96,6 @@ export interface GenerationErrorDTO {
   errorCode: string;
   errorMessage: string;
   createdAt: string; // corresponds to created_at in the DB
-  updatedAt?: string; // corresponds to updated_at in the DB (optional)
 }
 
 /**

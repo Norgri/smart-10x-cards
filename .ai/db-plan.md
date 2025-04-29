@@ -56,7 +56,6 @@ This table is managed by Supabase Auth.
 - **error_code**: VARCHAR(50) NOT NULL
 - **error_message**: TEXT NOT NULL
 - **created_at**: TIMESTAMPTZ NOT NULL DEFAULT NOW()
-- **updated_at**: TIMESTAMPTZ NOT NULL DEFAULT NOW()
 
 ## 2. Relacje między tabelami
 
