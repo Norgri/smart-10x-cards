@@ -93,13 +93,13 @@ Ten endpoint inicjuje proces generacji fiszek za pomocą przesłania obrazu. Po 
 
 ## 9. Etapy wdrożenia
 1. **Utworzenie endpointu API:**
-   - Dodanie nowego pliku w katalogu `/src/pages/api/generation-sessions` zgodnie z zasadami Astro.
+   - Dodanie nowego pliku w katalogu `/src/pages/api/` zgodnie z zasadami Astro np. `generation-sessions.ts`.
 2. **Implementacja middleware:**
    - Weryfikacja tokena JWT i ustawienie kontekstu użytkownika.
 3. **Walidacja danych wejściowych:**
    - Sprawdzenie obecności i formatu przesłanego pliku `image`.
 4. **Utworzenie serwisu generacji:**
-   - Utworzenie lub rozszerzenie serwisu w `src/lib/services/generation.service.ts` do obsługi logiki komunikacji z zewnętrznym API AI. Na tym etapie użyjemy mocka zamiast wywołania AI.
+   - Utworzenie lub rozszerzenie serwisu w `src/lib/services/generation.service.ts` do obsługi logiki komunikacji z zewnętrznym API AI. Na tym etapie użyjemy mocka zamiast wywołania.
 5. **Integracja z zewnętrznym API AI:**
    - Implementacja wywołania zewnętrznego serwisu, przetwarzanie odpowiedzi oraz mapowanie na wewnętrzne struktury (DTO).
 6. **Rejestracja sesji generacji i błędów:**
