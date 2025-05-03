@@ -92,7 +92,7 @@ export interface GenerateFlashcardsFromImageCommand {
  */
 export interface GenerationErrorDTO {
   id: number;
-  sessionId: string; // Converted to string for API consistency
+  sessionId: number; // Converted to string for API consistency
   errorCode: string;
   errorMessage: string;
   createdAt: string; // corresponds to created_at in the DB
@@ -119,7 +119,7 @@ export interface LogFlashcardActionCommand {
  */
 export interface LogActionDTO {
   id: number;
-  sessionId: string;
+  sessionId: number;
   flashcardId?: number;
   actionType: "accepted" | "edited" | "rejected";
   timestamp: string; // Represents when the action was logged

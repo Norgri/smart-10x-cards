@@ -131,7 +131,46 @@ CREATE POLICY user_log_action_policy ON log_action
     USING (user_id = current_setting('app.current_user_id')::uuid);;
 ```
 
-## 5. Dodatkowe uwagi
+## 5. Procedury składowane
+
+### 5.1. log_flashcard_action
+Procedura do logowania akcji na wygenerowanych fiszkach i tworzenia nowych fiszek.
+
+```sql
+create or replace function public.log_flashcard_action(
+  p_session_id text,
+  p_user_id text,
+  p_action_type text,
+  p_flashcard_data jsonb
+) returns table (
+  id bigint,
+  session_id text,
+  flashcard_id bigint,
+  action_type text,
+  created_at timestamptz
+)
+```
+
+- **Parametry wejściowe:**
+  - `p_session_id`: ID sesji generowania
+  - `p_user_id`: ID użytkownika
+  - `p_action_type`: Typ akcji ('accepted', 'edited', 'rejected')
+  - `p_flashcard_data`: Dane fiszki w formacie JSON (dla akcji 'accepted' i 'edited')
+
+- **Zwracane dane:**
+  - `id`: ID utworzonego logu
+  - `session_id`: ID sesji generowania
+  - `flashcard_id`: ID utworzonej fiszki (dla akcji 'accepted' i 'edited')
+  - `action_type`: Typ wykonanej akcji
+  - `created_at`: Data utworzenia logu
+
+- **Funkcjonalność:**
+  - Używa transakcji do zapewnienia spójności danych
+  - Tworzy nową fiszkę dla akcji 'accepted' i 'edited'
+  - Loguje akcję w tabeli `log_action`
+  - W przypadku błędu wykonuje rollback całej transakcji
+
+## 6. Dodatkowe uwagi
 
 - Wszystkie nazwy tabel i kolumn są w notacji snake_case.
 - Walidacja maksymalnie 4 tagów przypisanych do fiszki będzie realizowana na poziomie aplikacji.

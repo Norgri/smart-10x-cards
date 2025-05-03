@@ -89,16 +89,19 @@ Wszystkie błędy powinny być logowane dla celów diagnostycznych.
 
 ## 9. Etapy wdrożenia
 1. **Service Layer:**
+   - Aktualizacja serwisu `GenerationService`:
+     - Weryfikuje czy dana sesja istnieje.
    - Utworzenie lub aktualizacja serwisu (np. `FlashcardActionService`), który:
-     - Weryfikuje i przetwarza dane żądania.
+     - Używa `GenerationService` do weryfikacji czy dana sesja istnieje
      - Tworzy rekord fiszki w przypadku akcji "accepted" lub "edited".
      - Loguje akcję w tabeli `log_action`.
 2. **Walidacja:**
-   - Implementacja walidacji wejścia przy użyciu Zod.
+   - Implementacja walidacji wejścia przy użyciu Zod na poziomie endpointa nie Service Layer.
    - Egzekwowanie reguł biznesowych (pola niepuste, maksymalna liczba tagów).
 3. **API Route:**
    - Utworzenie pliku endpointu w `src/pages/api/generation-sessions/[session_id]/flashcard-actions.ts`.
    - Podpięcie routingu i integracja z warstwą serwisową.
+   - Walidacja danych wejściowych.
 4. **Interakcja z Bazą Danych:**
    - Wdrożenie operacji na bazie danych za pomocą klienta Supabase.
    - Użycie transakcji do połączenia operacji tworzenia fiszki (jeśli dotyczy) i logowania akcji.
