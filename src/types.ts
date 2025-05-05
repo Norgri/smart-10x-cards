@@ -104,13 +104,7 @@ export interface GenerationErrorDTO {
  */
 export interface LogFlashcardActionCommand {
   actionType: "accepted" | "edited" | "rejected";
-  generatedFlashcard?: {
-    front: string;
-    back: string;
-    phonetic?: string | null;
-    tags: string[];
-    source: "ai";
-  };
+  generatedFlashcard?: GeneratedFlashcardDTO;
 }
 
 /**
