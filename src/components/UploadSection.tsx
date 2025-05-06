@@ -5,7 +5,7 @@ import { Card, CardContent } from "./ui/card";
 import { toast } from "sonner";
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
-const ALLOWED_FILE_TYPES = ["image/jpeg", "image/png"] as const;
+const ALLOWED_FILE_TYPES = ["image/jpeg", "image/png", "image/jpg"] as const;
 
 interface UploadSectionProps {
   selectedFile: File | null;
