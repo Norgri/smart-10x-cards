@@ -121,18 +121,22 @@ Extract ALL vocabulary entries from the image, not just a few examples.`,
 
       // Request flashcards generation from OpenRouter
       const aiResponse = await this.openRouterService.sendRequest(messages, {
-        type: "json_object",
-        schema: {
-          type: "array",
-          items: {
-            type: "object",
-            properties: {
-              front: { type: "string" },
-              back: { type: "string" },
-              phonetic: { type: "string", nullable: true },
-              tags: { type: "array", items: { type: "string" }, maxItems: 4 },
+        type: "json_schema",
+        json_schema: {
+          name: "flashcard_response",
+          strict: true,
+          schema: {
+            type: "array",
+            items: {
+              type: "object",
+              properties: {
+                front: { type: "string" },
+                back: { type: "string" },
+                phonetic: { type: "string", nullable: true },
+                tags: { type: "array", items: { type: "string" } },
+              },
+              required: ["front", "back"],
             },
-            required: ["front", "back"],
           },
         },
       });
@@ -146,7 +150,7 @@ Extract ALL vocabulary entries from the image, not just a few examples.`,
 
       // Return session data
       return {
-        id: aiResponse.id,
+        id: sessionId,
         flashcards,
         createdAt: new Date().toISOString(),
       };
@@ -159,7 +163,7 @@ Extract ALL vocabulary entries from the image, not just a few examples.`,
       }
 
       return {
-        id: `error-${Date.now()}`,
+        id: sessionId,
         errors: [
           {
             id: 1,

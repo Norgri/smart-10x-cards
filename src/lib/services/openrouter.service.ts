@@ -197,7 +197,7 @@ export class OpenRouterService {
    */
   public async sendRequest(
     messages: Message[],
-    responseFormat?: { type: "json_object" | "json_schema"; schema?: Record<string, unknown> },
+    responseFormat?: { type: "json_object" | "json_schema"; json_schema?: Record<string, unknown> },
     additionalParams?: Partial<OpenRouterConfig["modelParameters"]>
   ): Promise<OpenRouterResponse> {
     let lastError: Error | null = null;
@@ -288,7 +288,7 @@ export class OpenRouterService {
 
   private buildPayload(
     messages: Message[],
-    responseFormat?: { type: "json_object" | "json_schema"; schema?: Record<string, unknown> },
+    responseFormat?: { type: "json_object" | "json_schema"; json_schema?: Record<string, unknown> },
     additionalParams?: Partial<OpenRouterConfig["modelParameters"]>
   ): Record<string, unknown> {
     // Validate messages

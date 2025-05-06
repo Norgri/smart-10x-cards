@@ -72,7 +72,7 @@ export interface GeneratedFlashcardDTO {
  * It is derived from the 'generation_session' table and includes the generated flashcards.
  */
 export interface GenerationSessionDTO {
-  id: string; // API sample uses a string, e.g., "session-123"
+  id?: number | null; // API sample uses a string, e.g., "123"
   flashcards?: GeneratedFlashcardDTO[];
   errors?: Pick<GenerationErrorDTO, "id" | "errorCode" | "errorMessage">[];
   createdAt: string; // corresponds to created_at in the DB
