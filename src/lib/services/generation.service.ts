@@ -20,39 +20,31 @@ export class GenerationService {
       {
         role: "system",
         content:
-          "You are a helpful assistant that creates flashcards from textbook images. Each flashcard should contain an English word/phrase on the front, its Polish translation on the back, and optionally phonetic transcription. Also suggest up to 4 relevant tags for each flashcard.",
+          "You are a specialized AI trained to extract text from English-Polish textbook images and create high-quality flashcards. You can recognize English words/phrases, their phonetic transcriptions, and Polish translations directly from textbook pages.",
       },
       {
         role: "user",
         content: [
           {
             type: "text",
-            text: `Please analyze this textbook image and create flashcards from it. For each flashcard provide: front (English), back (Polish), optional phonetic transcription, and up to 4 relevant tags in Polish. Format the response as a JSON array of flashcard objects.
-Sample text from image:
-Lesson 6.1
-Daily activities - Czynności dnia codziennego
-do my homework duː maɪ ˈhəʊmwɜːk odrabiać pracę domową
-get up ɡɛt ʌp wstawać
+            text: `Analyze this English-Polish textbook image:
+1. First, extract all visible text including English words/phrases, phonetic transcriptions, and Polish translations
+2. Identify lesson numbers, sections, and any organizational structure
+3. Create flashcards with:
+   - front: English word/phrase
+   - back: Polish translation
+   - phonetic: Phonetic transcription (extract from image if available, if not try to generate english phonetic transcription)
+   - tags: Up to 4 relevant tags only in Polish language based on context (lesson number, category, etc.) - Lesson 6.1 is Lekcja 6.1 in Polish
 
-Result should be:
+Format your response as a JSON array of flashcard objects:
 [{
-  "front": "Daily activities",
-  "back": "Czynności dnia codziennego",
-  "phonetic": "",
-  "tags": ["Lekcja 6.1", "Czynności dnia codziennego", "czynności", "dzień"]
-},
-{
-  "front": "do my homework",
-  "back": "odrabiać pracę domową",
-  "phonetic": "duː maɪ ˈhəʊmwɜːk",
-  "tags": ["Lekcja 6.1", "Czynności dnia codziennego", "szkoła", "uczenie się"]
-},
-{
-  "front": "get up",
-  "back": "wstawać",
-  "phonetic": "ɡɛt ʌp",
-  "tags": ["Lekcja 6.1", "Czynności dnia codziennego", "budzenie się", "wstawanie"]
-}]`,
+  "front": "English word/phrase",
+  "back": "Polish translation",
+  "phonetic": "Phonetic transcription if available",
+  "tags": ["Tag1", "Tag2", "Tag3", "Tag4"]
+}]
+
+Extract ALL vocabulary entries from the image, not just a few examples.`,
           },
           {
             type: "image_url",
