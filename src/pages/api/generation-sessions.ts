@@ -2,6 +2,9 @@ import type { APIRoute } from "astro";
 import { z } from "zod";
 import type { GenerateFlashcardsFromImageCommand, GenerationSessionDTO } from "../../types";
 import { GenerationService } from "../../lib/services/generation.service";
+import { OpenRouterService, OpenRouterError, OpenRouterApiError } from "../../lib/services/openrouter.service";
+import { ImageValidationService } from "../../lib/services/image-validation.service";
+import { openRouterConfig } from "../../lib/config/openrouter.config";
 import { DEFAULT_USER_ID } from "../../db/supabase.client";
 
 // Disable prerendering for this endpoint as it handles dynamic data
@@ -50,8 +53,26 @@ export const POST: APIRoute = async ({ request, locals }): Promise<Response> => 
 
     const command: GenerateFlashcardsFromImageCommand = validationResult.data;
 
-    // Initialize generation service
-    const generationService = new GenerationService(locals.supabase);
+    // Validate image dimensions and format
+    const imageValidationService = new ImageValidationService();
+    const imageValidation = await imageValidationService.validateImage(command.image);
+
+    if (!imageValidation.isValid) {
+      return new Response(
+        JSON.stringify({
+          error: "Image validation failed",
+          message: imageValidation.error,
+        }),
+        {
+          status: 400,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+    }
+
+    // Initialize services
+    const openRouterService = new OpenRouterService(openRouterConfig);
+    const generationService = new GenerationService(locals.supabase, openRouterService);
 
     // Process image and generate flashcards
     const generationResult: GenerationSessionDTO = await generationService.generateFlashcardsFromImage(
@@ -66,9 +87,47 @@ export const POST: APIRoute = async ({ request, locals }): Promise<Response> => 
     });
   } catch (error) {
     console.error("Error processing generation request:", error);
-    return new Response(JSON.stringify({ error: "Internal server error" }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" },
-    });
+
+    // Handle OpenRouter specific errors
+    if (error instanceof OpenRouterApiError) {
+      const statusCode = error.statusCode || 500;
+      return new Response(
+        JSON.stringify({
+          error: "OpenRouter API Error",
+          message: error.message,
+          retryable: error.retryable,
+        }),
+        {
+          status: statusCode,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+    }
+
+    if (error instanceof OpenRouterError) {
+      return new Response(
+        JSON.stringify({
+          error: "OpenRouter Error",
+          message: error.message,
+          retryable: error.retryable,
+        }),
+        {
+          status: 500,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+    }
+
+    // Handle other errors
+    return new Response(
+      JSON.stringify({
+        error: "Internal server error",
+        message: error instanceof Error ? error.message : "Unknown error occurred",
+      }),
+      {
+        status: 500,
+        headers: { "Content-Type": "application/json" },
+      }
+    );
   }
 };

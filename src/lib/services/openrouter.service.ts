@@ -35,6 +35,7 @@ export interface Message {
 
 export interface OpenRouterResponse {
   id: string;
+  model: string;
   choices: {
     message: {
       content: string;
@@ -83,6 +84,7 @@ const messageSchema = z.object({
 
 const openRouterResponseSchema = z.object({
   id: z.string(),
+  model: z.string(),
   choices: z.array(
     z.object({
       message: z.object({

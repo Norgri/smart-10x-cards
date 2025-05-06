@@ -99,7 +99,7 @@ Ten endpoint inicjuje proces generacji fiszek za pomocą przesłania obrazu. Po 
 3. **Walidacja danych wejściowych:**
    - Sprawdzenie obecności i formatu przesłanego pliku `image`.
 4. **Utworzenie serwisu generacji:**
-   - Utworzenie lub rozszerzenie serwisu w `src/lib/services/generation.service.ts` do obsługi logiki komunikacji z zewnętrznym API AI. Na tym etapie użyjemy mocka zamiast wywołania.
+   - Utworzenie lub rozszerzenie serwisu w `src/lib/services/generation.service.ts` do obsługi logiki komunikacji z zewnętrznym API AI.
 5. **Integracja z zewnętrznym API AI:**
    - Implementacja wywołania zewnętrznego serwisu, przetwarzanie odpowiedzi oraz mapowanie na wewnętrzne struktury (DTO).
 6. **Rejestracja sesji generacji i błędów:**
