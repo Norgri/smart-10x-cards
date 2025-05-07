@@ -77,7 +77,7 @@ export function GenerateFlashcardsView() {
       setState((prev) => ({
         ...prev,
         loading: false,
-        sessionId: data.id,
+        sessionId: data.id?.toString() || null,
         flashcards: data.flashcards || [],
         error: data.errors?.length ? data.errors.map((e) => e.errorMessage).join(", ") : null,
       }));
