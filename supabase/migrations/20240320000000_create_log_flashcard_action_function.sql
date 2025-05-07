@@ -5,7 +5,7 @@ create or replace function public.log_flashcard_action(
   p_action_type text,
   p_flashcard_data jsonb
 ) returns table (
-  id bigint,
+  log_id bigint,
   session_id text,
   flashcard_id bigint,
   action_type text,
@@ -16,7 +16,7 @@ declare
   v_log_id bigint;
   v_tag text;
 begin
-  -- Start transaction
+
   begin
     -- If action is 'accepted' or 'edited', create a flashcard
     if p_action_type in ('accepted', 'edited') then
@@ -78,20 +78,16 @@ begin
     -- Return the result
     return query
     select
-      la.id,
-      la.generation_session_id,
+      la.id as log_id,
+      la.generation_session_id as session_id,
       la.flashcard_id,
       la.action_type,
       la.created_at
     from public.log_action la
     where la.id = v_log_id;
 
-    -- Commit transaction
-    commit;
   exception
     when others then
-      -- Rollback transaction on error
-      rollback;
       raise;
   end;
 end;

@@ -43,7 +43,7 @@ export class FlashcardActionService {
     }
 
     return {
-      id: data.id,
+      id: data.log_id,
       sessionId: data.session_id,
       flashcardId: data.flashcard_id,
       actionType: data.action_type,
