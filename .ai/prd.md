@@ -98,7 +98,7 @@ Poniżej znajdują się historyjki użytkowników opisujące interakcje z aplika
 
 *   ID: US-005
 *   Tytuł: Przeglądanie wygenerowanych fiszek AI
-*   Opis: Jako użytkownik, chcę móc przejrzeć listę fiszek wygenerowanych przez AI bezpośrednio po ich utworzeniu, aby ocenić ich poprawność i zdecydować co dalej.
+*   Opis: Jako zalogowany użytkownik, chcę móc przejrzeć listę fiszek wygenerowanych przez AI bezpośrednio po ich utworzeniu, aby ocenić ich poprawność i zdecydować co dalej.
 *   Kryteria akceptacji:
     *   Wygenerowane fiszki są wyświetlane w formie listy lub kart na tym samym widoku, co pole przesyłania zdjęcia.
     *   Każda fiszka pokazuje wygenerowaną treść (przód, tył, fonetyka) oraz tagi.
@@ -108,7 +108,7 @@ Poniżej znajdują się historyjki użytkowników opisujące interakcje z aplika
 
 *   ID: US-006
 *   Tytuł: Akceptacja fiszki wygenerowanej przez AI
-*   Opis: Jako użytkownik, przeglądając wygenerowane fiszki, chcę móc oznaczyć poprawną fiszkę jako "zaakceptowaną", aby została ona zapisana na moim koncie i aby system wiedział, że AI zadziałało poprawnie.
+*   Opis: Jako zalogowany użytkownik, przeglądając wygenerowane fiszki, chcę móc oznaczyć poprawną fiszkę jako "zaakceptowaną", aby została ona zapisana na moim koncie i aby system wiedział, że AI zadziałało poprawnie.
 *   Kryteria akceptacji:
     *   Kliknięcie przycisku "Akceptuj" przy fiszce powoduje jej zapisanie w bazie danych użytkownika.
     *   Akcja "Akceptuj" jest logowana w systemie do celów analitycznych (metryki sukcesu).
@@ -118,7 +118,7 @@ Poniżej znajdują się historyjki użytkowników opisujące interakcje z aplika
 
 *   ID: US-007
 *   Tytuł: Edycja fiszki wygenerowanej przez AI
-*   Opis: Jako użytkownik, przeglądając wygenerowane fiszki, chcę móc edytować treść (przód, tył, fonetyka) oraz tagi (dodawać, usuwać - max 4) niepoprawnej lub niekompletnej fiszki, aby poprawić jej jakość przed zapisaniem.
+*   Opis: Jako zalogowany użytkownik, przeglądając wygenerowane fiszki, chcę móc edytować treść (przód, tył, fonetyka) oraz tagi (dodawać, usuwać - max 4) niepoprawnej lub niekompletnej fiszki, aby poprawić jej jakość przed zapisaniem.
 *   Kryteria akceptacji:
     *   Kliknięcie przycisku "Edytuj" otwiera formularz edycji danej fiszki.
     *   Formularz zawiera edytowalne pola dla przodu, tyłu, zapisu fonetycznego i tagów.
@@ -132,7 +132,7 @@ Poniżej znajdują się historyjki użytkowników opisujące interakcje z aplika
 
 *   ID: US-008
 *   Tytuł: Usuwanie fiszki wygenerowanej przez AI
-*   Opis: Jako użytkownik, przeglądając wygenerowane fiszki, chcę móc usunąć błędną lub niepotrzebną fiszkę, aby nie zaśmiecała mojej bazy wiedzy.
+*   Opis: Jako zalogowany użytkownik, przeglądając wygenerowane fiszki, chcę móc usunąć błędną lub niepotrzebną fiszkę, aby nie zaśmiecała mojej bazy wiedzy.
 *   Kryteria akceptacji:
     *   Kliknięcie przycisku "Usuń" przy fiszce powoduje jej permanentne usunięcie (lub oznaczenie jako usunięta) z listy do weryfikacji.
     *   Akcja "Usuń" jest logowana w systemie do celów analitycznych.
@@ -143,7 +143,7 @@ Poniżej znajdują się historyjki użytkowników opisujące interakcje z aplika
 
 *   ID: US-009
 *   Tytuł: Tworzenie manualne nowej fiszki
-*   Opis: Jako użytkownik, chcę móc ręcznie dodać nową fiszkę (np. słówko zasłyszane poza podręcznikiem), podając jej treść (przód, tył, opcjonalnie fonetyka) i tagi, aby uzupełnić moją kolekcję.
+*   Opis: Jako zalogowany użytkownik, chcę móc ręcznie dodać nową fiszkę (np. słówko zasłyszane poza podręcznikiem), podając jej treść (przód, tył, opcjonalnie fonetyka) i tagi, aby uzupełnić moją kolekcję.
 *   Kryteria akceptacji:
     *   Dostępny jest dedykowany przycisk/sekcja do tworzenia nowej fiszki.
     *   Formularz tworzenia zawiera pola na przód (słowo/fraza), tył (tłumaczenie), opcjonalny zapis fonetyczny i tagi.
@@ -156,7 +156,7 @@ Poniżej znajdują się historyjki użytkowników opisujące interakcje z aplika
 
 *   ID: US-010
 *   Tytuł: Przeglądanie wszystkich zapisanych fiszek
-*   Opis: Jako użytkownik, chcę mieć dostęp do widoku listy wszystkich moich zapisanych fiszek (zarówno tych zaakceptowanych z AI, jak i stworzonych manualnie), aby móc je przeglądać i zarządzać nimi.
+*   Opis: Jako zalogowany użytkownik, chcę mieć dostęp do widoku listy wszystkich moich zapisanych fiszek (zarówno tych zaakceptowanych z AI, jak i stworzonych manualnie), aby móc je przeglądać i zarządzać nimi.
 *   Kryteria akceptacji:
     *   Istnieje dedykowana strona/sekcja wyświetlająca wszystkie fiszki użytkownika.
     *   Fiszki są prezentowane w czytelny sposób (np. lista, karty), pokazując kluczowe informacje (przód, tył).
@@ -167,7 +167,7 @@ Poniżej znajdują się historyjki użytkowników opisujące interakcje z aplika
 
 *   ID: US-011
 *   Tytuł: Wyszukiwanie fiszek po tagach
-*   Opis: Jako użytkownik, przeglądając listę wszystkich moich fiszek, chcę móc wyszukać/filtrować fiszki na podstawie przypisanych tagów (np. "Rozdział 3", "Czasowniki nieregularne"), aby szybko znaleźć materiał do konkretnej powtórki.
+*   Opis: Jako zalogowany użytkownik, przeglądając listę wszystkich moich fiszek, chcę móc wyszukać/filtrować fiszki na podstawie przypisanych tagów (np. "Rozdział 3", "Czasowniki nieregularne"), aby szybko znaleźć materiał do konkretnej powtórki.
 *   Kryteria akceptacji:
     *   W widoku listy fiszek znajduje się pole wyszukiwania/filtrowania tagów.
     *   Użytkownik może wybrać jeden lub więcej tagów jako kryterium wyszukiwania.
@@ -178,7 +178,7 @@ Poniżej znajdują się historyjki użytkowników opisujące interakcje z aplika
 
 *   ID: US-012
 *   Tytuł: Edycja istniejącej fiszki (manualnej lub zaakceptowanej/edytowanej AI)
-*   Opis: Jako użytkownik, przeglądając listę wszystkich moich fiszek, chcę móc edytować treść i tagi istniejącej fiszki, aby poprawić błędy lub zaktualizować informacje.
+*   Opis: Jako zalogowany użytkownik, przeglądając listę wszystkich moich fiszek, chcę móc edytować treść i tagi istniejącej fiszki, aby poprawić błędy lub zaktualizować informacje.
 *   Kryteria akceptacji:
     *   W widoku listy fiszek przy każdej fiszce znajduje się przycisk "Edytuj".
     *   Kliknięcie "Edytuj" otwiera formularz z załadowanymi danymi fiszki (przód, tył, fonetyka, tagi).
@@ -189,7 +189,7 @@ Poniżej znajdują się historyjki użytkowników opisujące interakcje z aplika
 
 *   ID: US-013
 *   Tytuł: Usuwanie istniejącej fiszki (manualnej lub zaakceptowanej/edytowanej AI)
-*   Opis: Jako użytkownik, przeglądając listę wszystkich moich fiszek, chcę móc usunąć niepotrzebną już fiszkę, aby utrzymać porządek w mojej kolekcji.
+*   Opis: Jako zalogowany użytkownik, przeglądając listę wszystkich moich fiszek, chcę móc usunąć niepotrzebną już fiszkę, aby utrzymać porządek w mojej kolekcji.
 *   Kryteria akceptacji:
     *   W widoku listy fiszek przy każdej fiszce znajduje się przycisk "Usuń".
     *   Kliknięcie "Usuń" powoduje permanentne usunięcie fiszki z bazy danych użytkownika.
@@ -200,7 +200,7 @@ Poniżej znajdują się historyjki użytkowników opisujące interakcje z aplika
 
 *   ID: US-014
 *   Tytuł: Obsługa błędów generowania AI
-*   Opis: Jako użytkownik, w przypadku gdy AI nie jest w stanie przetworzyć zdjęcia lub zwraca błąd, chcę otrzymać czytelny komunikat o problemie, abym wiedział, co się stało i co mogę zrobić dalej (np. spróbować ponownie, przesłać inne zdjęcie).
+*   Opis: Jako zalogowany użytkownik, w przypadku gdy AI nie jest w stanie przetworzyć zdjęcia lub zwraca błąd, chcę otrzymać czytelny komunikat o problemie, abym wiedział, co się stało i co mogę zrobić dalej (np. spróbować ponownie, przesłać inne zdjęcie).
 *   Kryteria akceptacji:
     *   W przypadku niepowodzenia procesu generowania AI (np. błąd API, nieczytelne zdjęcie dla OCR/AI) użytkownik widzi prosty, zrozumiały komunikat na interfejsie.
     *   Komunikat informuje o niepowodzeniu i sugeruje możliwe kroki (np. "Nie udało się wygenerować fiszek. Spróbuj ponownie lub użyj innego zdjęcia.").
