@@ -1,0 +1,24 @@
+---
+import AuthLayout from "../../layouts/AuthLayout.astro";
+import { RegisterForm } from "../../components/auth/RegisterForm";
+import { supabaseClient } from "../../db/supabase.client";
+---
+
+<AuthLayout title="Register - Smart 10x Cards">
+  <Fragment slot="description">Create a new account to get started.</Fragment>
+
+  <RegisterForm
+    client:load
+    onSubmit={async (email, password) => {
+      const { error } = await supabaseClient.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: `${Astro.url.origin}/auth/callback`,
+        },
+      });
+
+      if (error) throw error;
+    }}
+  />
+</AuthLayout>

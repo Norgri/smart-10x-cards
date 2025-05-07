@@ -1,0 +1,21 @@
+---
+import AuthLayout from "../../layouts/AuthLayout.astro";
+import { LoginForm } from "../../components/auth/LoginForm";
+import { supabaseClient } from "../../db/supabase.client";
+---
+
+<AuthLayout title="Login - Smart 10x Cards">
+  <Fragment slot="description">Welcome back! Please sign in to your account.</Fragment>
+
+  <LoginForm
+    client:load
+    onSubmit={async (email, password) => {
+      const { error } = await supabaseClient.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (error) throw error;
+    }}
+  />
+</AuthLayout>

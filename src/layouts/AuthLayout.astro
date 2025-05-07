@@ -1,0 +1,28 @@
+---
+import Layout from "./Layout.astro";
+
+interface Props {
+  title?: string;
+}
+
+const { title = "Authentication - Smart 10x Cards" } = Astro.props;
+---
+
+<Layout title={title}>
+  <main class="container mx-auto px-4 py-8">
+    <div class="flex min-h-[calc(100vh-8rem)] items-center justify-center">
+      <div class="w-full max-w-md space-y-8">
+        <div class="text-center">
+          <h1 class="text-4xl font-bold mb-4">Smart 10x Cards</h1>
+          <p class="text-lg text-muted-foreground mb-8">
+            <slot name="description" />
+          </p>
+        </div>
+
+        <div class="rounded-lg border bg-card p-8 shadow-sm">
+          <slot />
+        </div>
+      </div>
+    </div>
+  </main>
+</Layout>
