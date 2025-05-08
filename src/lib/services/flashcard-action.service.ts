@@ -32,7 +32,7 @@ export class FlashcardActionService {
 
     // Start a transaction for creating flashcard (if needed) and logging action
     const { data, error } = await this.supabase.rpc("log_flashcard_action", {
-      p_session_id: sessionId,
+      p_session_id: this.convertSessionIdToInteger(sessionId),
       p_user_id: userId,
       p_action_type: command.actionType,
       p_flashcard_data: command.actionType === "rejected" ? null : command.generatedFlashcard,
@@ -49,5 +49,12 @@ export class FlashcardActionService {
       actionType: data.action_type,
       timestamp: data.created_at,
     };
+  }
+  convertSessionIdToInteger(sessionId: string) {
+    const parsedSessionId = Number.parseInt(sessionId, 10);
+    if (!Number.isInteger(parsedSessionId) || parsedSessionId <= 0) {
+      throw new Error("Invalid session ID");
+    }
+    return parsedSessionId;
   }
 }
