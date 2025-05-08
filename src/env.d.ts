@@ -5,8 +5,13 @@ import type { Database } from "./db/database.types";
 
 declare global {
   namespace App {
+    // For protected routes, user will always be defined (guaranteed by middleware)
     interface Locals {
       supabase: SupabaseClient<Database>;
+      user: {
+        email: string | null;
+        id: string;
+      };
     }
   }
 }

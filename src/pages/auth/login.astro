@@ -9,7 +9,7 @@ import { supabaseClient } from "../../db/supabase.client";
 
   <LoginForm
     client:load
-    onSubmit={async (email, password) => {
+    onSubmit={async (email: string, password: string) => {
       const { error } = await supabaseClient.auth.signInWithPassword({
         email,
         password,

@@ -2,7 +2,6 @@ import type { APIRoute } from "astro";
 import { z } from "zod";
 import type { LogFlashcardActionCommand } from "../../../../types";
 import { FlashcardActionService } from "../../../../lib/services/flashcard-action.service";
-import { DEFAULT_USER_ID } from "../../../../db/supabase.client";
 
 // Disable prerendering for this endpoint as it handles dynamic data
 export const prerender = false;
@@ -55,9 +54,9 @@ export const POST: APIRoute = async ({ request, params, locals }): Promise<Respo
       );
     }
 
-    // Initialize service and process the action
+    // Initialize service and process the action using user ID from locals
     const flashcardActionService = new FlashcardActionService(locals.supabase);
-    const result = await flashcardActionService.logFlashcardAction(sessionId, DEFAULT_USER_ID, validationResult.data);
+    const result = await flashcardActionService.logFlashcardAction(sessionId, locals.user.id, validationResult.data);
 
     // Return successful response
     return new Response(JSON.stringify(result), {

@@ -21,11 +21,10 @@ This endpoint logs user actions on a generated flashcard within an AI generation
     }
   }
   ```
-- **Walidacja Danych:**
-  - `actionType` musi być jednym z: "accepted", "edited", "rejected".
-  - Dla akcji "accepted" lub "edited" obiekt `generatedFlashcard` jest wymagany.
-  - Pola `front` i `back` w `generatedFlashcard` nie mogą być puste.
-  - Maksymalnie 4 tagi są dozwolone.
+- **Autoryzacja:**
+  - Wymagany ważny token JWT w ciasteczkach sesji Supabase
+  - Endpoint zwraca 401 Unauthorized jeśli brak ważnej sesji
+  - Identyfikator użytkownika jest automatycznie pobierany z kontekstu sesji
 
 ## 3. Wykorzystywane typy
 - **DTOs i Command Modele:**
@@ -64,13 +63,23 @@ This endpoint logs user actions on a generated flashcard within an AI generation
 6. Zwrot pełnego rekordu logu jako odpowiedzi.
 
 ## 6. Względy bezpieczeństwa
-- **Autoryzacja:** Endpoint powinien być dostępny tylko dla uwierzytelnionych użytkowników.
-- **Dostęp:** Weryfikacja, czy sesja generowania należy do użytkownika lub jest do niego dostępna.
-- **Walidacja Danych:** Użycie solidnych mechanizmów walidacyjnych (np. Zod) do sanityzacji i potwierdzenia danych wejściowych.
-- **Bezpieczeństwo Bazy Danych:** Korzystanie z zapytań parametryzowanych w celu zapobiegania SQL Injection.
-- **Transakcje:** Użycie transakcji w bazie danych dla zapewnienia spójności przy jednoczesnym tworzeniu fiszki i logowaniu akcji.
+- **Autoryzacja:**
+  - Endpoint dostępny tylko dla uwierzytelnionych użytkowników poprzez middleware
+  - Identyfikator użytkownika pobierany automatycznie z kontekstu sesji
+  - Walidacja czy sesja generowania należy do zalogowanego użytkownika
+- **Dostęp:**
+  - Weryfikacja, czy sesja generowania należy do użytkownika lub jest do niego dostępna.
+- **Walidacja Danych:**
+  - Użycie solidnych mechanizmów walidacyjnych (np. Zod) do sanityzacji i potwierdzenia danych wejściowych.
+- **Bezpieczeństwo Bazy Danych:**
+  - Korzystanie z zapytań parametryzowanych w celu zapobiegania SQL Injection.
+- **Transakcje:**
+  - Użycie transakcji w bazie danych dla zapewnienia spójności przy jednoczesnym tworzeniu fiszki i logowaniu akcji.
 
 ## 7. Obsługa błędów
+- **401 Unauthorized:**
+  - Zwracany automatycznie przez middleware dla nieautoryzowanych żądań
+  - Przekierowanie na stronę logowania
 - **400 Bad Request:**
   - Błędny `actionType` lub brak wymaganych pól.
   - Przekroczenie limitu 4 tagów.

@@ -4,11 +4,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 
-interface LoginFormProps {
-  onSubmit: (email: string, password: string) => Promise<void>;
-}
+const LOGIN_TIMEOUT = 10000; // 10 seconds
 
-export function LoginForm({ onSubmit }: LoginFormProps) {
+export function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -23,10 +21,38 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
 
     try {
       setIsLoading(true);
-      await onSubmit(email, password);
-      window.location.href = "/";
+
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), LOGIN_TIMEOUT);
+
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+        signal: controller.signal,
+      });
+
+      clearTimeout(timeoutId);
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Wystąpił błąd podczas logowania");
+      }
+
+      window.location.href = data.redirectTo;
     } catch (err) {
-      toast.error(err instanceof Error ? err.message : "Wystąpił nieoczekiwany błąd");
+      if (err instanceof Error) {
+        if (err.name === "AbortError") {
+          toast.error("Przekroczono czas oczekiwania na odpowiedź serwera");
+        } else {
+          toast.error(err.message);
+        }
+      } else {
+        toast.error("Wystąpił nieoczekiwany błąd");
+      }
     } finally {
       setIsLoading(false);
     }

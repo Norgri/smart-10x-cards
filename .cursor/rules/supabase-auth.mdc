@@ -143,6 +143,7 @@ export const onRequest = defineMiddleware(
         email: user.email,
         id: user.id,
       };
+      locals.supabase = supabase;
     } else if (!PUBLIC_PATHS.includes(url.pathname)) {
       // Redirect to login for protected routes
       return redirect('/auth/login');

@@ -1,11 +1,19 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import { GenerateFlashcardsView } from "../components/GenerateFlashcardsView";
+
+// Strona chroniona - middleware już zapewnia przekierowanie na /auth/login jeśli użytkownik nie jest zalogowany
+const { user } = Astro.locals;
 ---
 
 <Layout title="Generate Flashcards">
   <main class="container mx-auto px-4 py-8">
-    <h1 class="text-4xl font-bold mb-8">Generate Flashcards</h1>
+    <div class="flex justify-between items-center mb-8">
+      <h1 class="text-4xl font-bold">Generate Flashcards</h1>
+      <div class="text-sm text-gray-600">
+        Zalogowano jako: {user?.email}
+      </div>
+    </div>
     <GenerateFlashcardsView client:load />
   </main>
 </Layout>

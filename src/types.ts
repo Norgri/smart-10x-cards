@@ -118,3 +118,24 @@ export interface LogActionDTO {
   actionType: "accepted" | "edited" | "rejected";
   timestamp: string; // Represents when the action was logged
 }
+
+// Auth API Types
+export interface AuthResponse {
+  user: {
+    id: string;
+    email: string | null;
+  } | null;
+  error?: string;
+  redirectTo?: string;
+}
+
+export interface AuthErrorResponse {
+  error: string;
+  details?: unknown;
+}
+
+// Login Command
+export interface LoginCommand {
+  email: string;
+  password: string;
+}

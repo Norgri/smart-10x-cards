@@ -12,6 +12,10 @@ Ten endpoint inicjuje proces generacji fiszek za pomocą przesłania obrazu. Po 
   - **Opcjonalne:**
     - Brak dodatkowych parametrów.
 - **Request Body:** Multipart/form-data zawierający pole `image`.
+- **Autoryzacja:**
+  - Wymagany ważny token JWT w ciasteczkach sesji Supabase
+  - Endpoint zwraca 401 Unauthorized jeśli brak ważnej sesji
+  - Identyfikator użytkownika jest automatycznie pobierany z kontekstu sesji
 
 ## 3. Wykorzystywane typy
 - `GenerateFlashcardsFromImageCommand` – zawiera pole `image: File`.
@@ -66,18 +70,22 @@ Ten endpoint inicjuje proces generacji fiszek za pomocą przesłania obrazu. Po 
 
 ## 6. Względy bezpieczeństwa
 - **Uwierzytelnianie i autoryzacja:**
-  - Każde żądanie musi zawierać ważny token JWT w nagłówku `Authorization`.
-  - Supabase RLS (Row-Level Security) ogranicza dostęp do danych tylko do właściciela zasobu.
+  - Każde żądanie musi zawierać ważną sesję Supabase w ciasteczkach
+  - Identyfikator użytkownika jest pobierany z sesji Supabase
+  - Supabase RLS (Row-Level Security) ogranicza dostęp do danych tylko do właściciela zasobu
+  - Brak możliwości wykonania operacji dla niezalogowanych użytkowników
+  - Middleware zapewnia automatyczną walidację sesji i przekierowanie na stronę logowania
 - **Walidacja danych wejściowych:**
   - Weryfikacja obecności pola `image` oraz sprawdzenie jego formatu i rozmiaru, aby zapobiec atakom typu DOS.
 - **Ochrona danych:**
   - Rejestrowanie wszystkich operacji w celu monitorowania i audytu.
 
 ## 7. Obsługa błędów
+- **Błąd 401:**
+  - Zwracany automatycznie przez middleware dla nieautoryzowanych żądań
+  - Przekierowanie na stronę logowania
 - **Błąd 400:**
   - Zwracany w przypadku braku pola `image`, niewłaściwego formatu lub przekroczenia limitu rozmiaru.
-- **Błąd 401:**
-  - Zwracany, gdy żądanie pochodzi od nieautoryzowanego użytkownika.
 - **Błąd 500:**
   - Zwracany w przypadku błędów wewnętrznych, np. problemów z przetwarzaniem obrazu przez serwis AI.
 - **Rejestrowanie błędów:**
