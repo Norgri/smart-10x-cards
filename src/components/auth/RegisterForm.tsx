@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import { Alert, AlertDescription } from "../ui/alert";
-import { Label } from "../ui/label";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
 
 interface RegisterFormProps {
   onSubmit: (email: string, password: string, confirmPassword: string) => Promise<void>;
@@ -12,7 +12,6 @@ export function RegisterForm({ onSubmit }: RegisterFormProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const validatePassword = (pass: string) => {
@@ -33,36 +32,36 @@ export function RegisterForm({ onSubmit }: RegisterFormProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null);
 
     if (!email.trim() || !password.trim() || !confirmPassword.trim()) {
-      setError("Proszę wypełnić wszystkie pola");
+      toast.error("Proszę wypełnić wszystkie pola");
       return;
     }
 
     const passwordError = validatePassword(password);
     if (passwordError) {
-      setError(passwordError);
+      toast.error(passwordError);
       return;
     }
 
     if (password !== confirmPassword) {
-      setError("Hasła nie są identyczne");
+      toast.error("Hasła nie są identyczne");
       return;
     }
 
     try {
       setIsLoading(true);
       await onSubmit(email, password, confirmPassword);
+      toast.success("Konto zostało utworzone pomyślnie");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Wystąpił nieoczekiwany błąd");
+      toast.error(err instanceof Error ? err.message : "Wystąpił nieoczekiwany błąd");
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="space-y-6" noValidate>
       <div className="space-y-4">
         <div className="space-y-2">
           <Label htmlFor="email">Email</Label>
@@ -73,7 +72,6 @@ export function RegisterForm({ onSubmit }: RegisterFormProps) {
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Wprowadź adres email"
             autoComplete="email"
-            required
             disabled={isLoading}
           />
         </div>
@@ -87,7 +85,6 @@ export function RegisterForm({ onSubmit }: RegisterFormProps) {
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Wprowadź hasło"
             autoComplete="new-password"
-            required
             disabled={isLoading}
           />
         </div>
@@ -101,17 +98,10 @@ export function RegisterForm({ onSubmit }: RegisterFormProps) {
             onChange={(e) => setConfirmPassword(e.target.value)}
             placeholder="Potwierdź hasło"
             autoComplete="new-password"
-            required
             disabled={isLoading}
           />
         </div>
       </div>
-
-      {error && (
-        <Alert variant="destructive">
-          <AlertDescription>{error}</AlertDescription>
-        </Alert>
-      )}
 
       <div className="space-y-4">
         <Button type="submit" className="w-full" disabled={isLoading}>

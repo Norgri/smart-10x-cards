@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Label } from "@/components/ui/label";
+import { toast } from "sonner";
 
 interface LoginFormProps {
   onSubmit: (email: string, password: string) => Promise<void>;
@@ -11,15 +11,13 @@ interface LoginFormProps {
 export function LoginForm({ onSubmit }: LoginFormProps) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError(null);
 
     if (!email.trim() || !password.trim()) {
-      setError("Proszę wypełnić wszystkie pola");
+      toast.error("Proszę wypełnić wszystkie pola");
       return;
     }
 
@@ -28,14 +26,14 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
       await onSubmit(email, password);
       window.location.href = "/";
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Wystąpił nieoczekiwany błąd");
+      toast.error(err instanceof Error ? err.message : "Wystąpił nieoczekiwany błąd");
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="space-y-6" noValidate>
       <div className="space-y-4">
         <div className="space-y-2">
           <Label htmlFor="email">Email</Label>
@@ -46,7 +44,6 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Wprowadź adres email"
             autoComplete="email"
-            required
             disabled={isLoading}
           />
         </div>
@@ -60,17 +57,10 @@ export function LoginForm({ onSubmit }: LoginFormProps) {
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Wprowadź hasło"
             autoComplete="current-password"
-            required
             disabled={isLoading}
           />
         </div>
       </div>
-
-      {error && (
-        <Alert variant="destructive">
-          <AlertDescription>{error}</AlertDescription>
-        </Alert>
-      )}
 
       <div className="space-y-4">
         <Button type="submit" className="w-full" disabled={isLoading}>
