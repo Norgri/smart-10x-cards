@@ -102,7 +102,7 @@ Poniżej znajdują się historyjki użytkowników opisujące interakcje z aplika
 *   Kryteria akceptacji:
     *   Wygenerowane fiszki są wyświetlane w formie listy lub kart na tym samym widoku, co pole przesyłania zdjęcia.
     *   Każda fiszka pokazuje wygenerowaną treść (przód, tył, fonetyka) oraz tagi.
-    *   Przy każdej fiszce znajdują się przyciski akcji: "Akceptuj", "Edytuj", "Usuń".
+    *   Przy każdej fiszce znajdują się przyciski akcji: "Akceptuj", "Edytuj", "Odrzuć".
 
 ---
 
@@ -131,11 +131,11 @@ Poniżej znajdują się historyjki użytkowników opisujące interakcje z aplika
 ---
 
 *   ID: US-008
-*   Tytuł: Usuwanie fiszki wygenerowanej przez AI
-*   Opis: Jako zalogowany użytkownik, przeglądając wygenerowane fiszki, chcę móc usunąć błędną lub niepotrzebną fiszkę, aby nie zaśmiecała mojej bazy wiedzy.
+*   Tytuł: Odrzucanie fiszki wygenerowanej przez AI
+*   Opis: Jako zalogowany użytkownik, przeglądając wygenerowane fiszki, chcę móc odrzucić błędną lub niepotrzebną fiszkę, aby nie zaśmiecała mojej bazy wiedzy.
 *   Kryteria akceptacji:
-    *   Kliknięcie przycisku "Usuń" przy fiszce powoduje jej permanentne usunięcie (lub oznaczenie jako usunięta) z listy do weryfikacji.
-    *   Akcja "Usuń" jest logowana w systemie do celów analitycznych.
+    *   Kliknięcie przycisku "Odrzuć" przy fiszce powoduje jej permanentne usunięcie (lub oznaczenie jako usunięta) z listy do weryfikacji.
+    *   Akcja "Odrzuć" jest logowana w systemie do celów analitycznych.
     *   Usunięta fiszka znika z widoku.
     *   System może wymagać potwierdzenia usunięcia (opcjonalnie).
 
@@ -235,7 +235,7 @@ Kluczowe wskaźniki (KPI) służące do pomiaru sukcesu MVP:
 
 1.  Jakość generowania AI:
     *   Cel: 75% fiszek wygenerowanych przez AI jest akceptowanych przez użytkownika bez edycji.
-    *   Pomiar: Monitorowanie akcji użytkownika ("Akceptuj", "Edytuj", "Usuń") dla każdej fiszki wygenerowanej przez AI. Obliczenie wskaźnika: `Liczba_Akcji_Akceptuj / (Liczba_Akcji_Akceptuj + Liczba_Akcji_Edytuj + Liczba_Akcji_Usuń)` dla danej sesji generowania lub w określonym przedziale czasowym. Logi powinny być przechowywane w bazie danych i umożliwiać agregację wyników.
+    *   Pomiar: Monitorowanie akcji użytkownika ("Akceptuj", "Edytuj", "Odrzuć") dla każdej fiszki wygenerowanej przez AI. Obliczenie wskaźnika: `Liczba_Akcji_Akceptuj / (Liczba_Akcji_Akceptuj + Liczba_Akcji_Edytuj + Liczba_Akcji_Odrzuć)` dla danej sesji generowania lub w określonym przedziale czasowym. Logi powinny być przechowywane w bazie danych i umożliwiać agregację wyników.
 
 2.  Adopcja funkcji generowania AI:
     *   Cel: Użytkownicy tworzą 75% wszystkich swoich fiszek za pomocą funkcji generowania AI.

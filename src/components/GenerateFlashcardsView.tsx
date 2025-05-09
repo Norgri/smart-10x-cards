@@ -58,12 +58,31 @@ export function GenerateFlashcardsView() {
 
         if (!response.ok) {
           const errorData = await response.json().catch(() => null);
-          throw new Error(errorData?.message || "Failed to generate flashcards. Please try again.");
+          const errorMessage =
+            errorData?.message || response.status === 413
+              ? "File is too large. Maximum size is 10MB."
+              : response.status === 415
+                ? "Invalid file type. Please select a JPEG or PNG image."
+                : response.status === 429
+                  ? "Too many requests. Please try again later."
+                  : "Failed to generate flashcards. Please try again.";
+          throw new Error(errorMessage);
         }
 
-        return await response.json();
+        const data = await response.json();
+
+        // Validate response data
+        if (!data || typeof data !== "object") {
+          throw new Error("Invalid response from server");
+        }
+
+        return data;
       } catch (error) {
-        if (retries < MAX_RETRIES && error instanceof Error && error.message.includes("network")) {
+        if (
+          retries < MAX_RETRIES &&
+          ((error instanceof Error && error.message.includes("network")) ||
+            (error instanceof TypeError && error.message.includes("failed to fetch")))
+        ) {
           retries++;
           await new Promise((resolve) => setTimeout(resolve, RETRY_DELAY * retries));
           return attemptGeneration();
@@ -74,12 +93,33 @@ export function GenerateFlashcardsView() {
 
     try {
       const data = await attemptGeneration();
+
+      if (data.errors?.length) {
+        const errorMessages = data.errors.map((e) => {
+          switch (e.errorCode) {
+            case "IMAGE_PROCESSING_ERROR":
+              return "Failed to process the image. Please try a different image.";
+            case "AI_SERVICE_ERROR":
+              return "AI service is temporarily unavailable. Please try again later.";
+            default:
+              return e.errorMessage;
+          }
+        });
+
+        setState((prev) => ({
+          ...prev,
+          loading: false,
+          error: errorMessages.join(", "),
+        }));
+        return;
+      }
+
       setState((prev) => ({
         ...prev,
         loading: false,
         sessionId: data.id?.toString() || null,
         flashcards: data.flashcards || [],
-        error: data.errors?.length ? data.errors.map((e) => e.errorMessage).join(", ") : null,
+        error: null,
       }));
 
       // Announce success to screen readers
@@ -148,7 +188,7 @@ export function GenerateFlashcardsView() {
     [handleFlashcardAction]
   );
 
-  const handleDelete = useCallback(
+  const handleReject = useCallback(
     (flashcard: GeneratedFlashcardDTO) => handleFlashcardAction(flashcard, "rejected"),
     [handleFlashcardAction]
   );
@@ -181,7 +221,7 @@ export function GenerateFlashcardsView() {
           sessionId={state.sessionId}
           onAccept={handleAccept}
           onEdit={handleEdit}
-          onDelete={handleDelete}
+          onReject={handleReject}
         />
       )}
     </div>

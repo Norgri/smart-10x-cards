@@ -23,7 +23,7 @@
 
 5. **LogActions**
    - Maps to the `log_action` table.
-   - Records actions performed on flashcards (accepted, edited, deleted).
+   - Records actions performed on flashcards (accepted, edited, rejected).
    - Key fields: id, user_id, generation_session_id, flashcard_id, action_type, created_at.
 
 6. **GenerationErrors**
@@ -240,7 +240,7 @@ Each endpoint will follow RESTful principles using appropriate HTTP methods and 
 - **Business Logic Mapping (from PRD):**
   - **User Registration and Login:** Implements basic authentication workflows (FR-001 and FR-002).
   - **Image Upload and AI Generation (FR-003 & FR-004):** The `/api/generation-sessions` endpoint processes an image to create flashcards and tag suggestions using external AI services (e.g., OpenRouter).
-  - **Flashcard Review and Action Logging (FR-005, FR-006, FR-007 & FR-008):** Users can review generated flashcards and perform actions such as accept, edit, or delete. Each action is logged via the `/api/generation-sessions/{session_id}/flashcard-actions` endpoint, storing the action in `log_action` for analytical purposes.
+  - **Flashcard Review and Action Logging (FR-005, FR-006, FR-007 & FR-008):** Users can review generated flashcards and perform actions such as accept, edit, or reject. Each action is logged via the `/api/generation-sessions/{session_id}/flashcard-actions` endpoint, storing the action in `log_action` for analytical purposes.
   - **Manual Flashcard Management (FR-009 to FR-013):** Provides full CRUD operations for manual flashcard creation, search by tags, and editing/deletion of existing flashcards.
   - **Error Handling (FR-014 & FR-015):** Errors encountered during AI generation are logged in the `generation_error` table and can be retrieved for debugging and user notifications.
   - **Optional Phonetic Field (FR-016):** The phonetic field is optional; absence of data should not cause errors.

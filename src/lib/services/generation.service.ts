@@ -43,6 +43,7 @@ Format your response as a JSON array of flashcard objects:
   "phonetic": "Phonetic transcription if available",
   "tags": ["Tag1", "Tag2", "Tag3", "Tag4"]
 }]
+Return only the JSON array, nothing else.
 
 Extract ALL vocabulary entries from the image, not just a few examples.`,
           },

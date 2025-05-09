@@ -43,7 +43,7 @@ create table log_action (
     user_id uuid references auth.users(id) on delete set null,
     generation_session_id bigint references generation_session(id) on delete set null,
     flashcard_id bigint references flashcards(id) on delete set null,
-    action_type varchar(10) not null check (action_type in ('accepted', 'edited', 'deleted')),
+    action_type varchar(10) not null check (action_type in ('accepted', 'edited', 'rejected')),
     created_at timestamptz not null default now()
 );
 

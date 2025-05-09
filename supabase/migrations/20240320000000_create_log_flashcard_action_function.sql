@@ -1,14 +1,14 @@
 -- Create a function to log flashcard actions and create flashcards when needed
 create or replace function public.log_flashcard_action(
-  p_session_id text,
+  p_session_id bigint,
   p_user_id text,
-  p_action_type text,
+  p_action_type varchar(10),
   p_flashcard_data jsonb
 ) returns table (
   log_id bigint,
-  session_id text,
+  session_id bigint,
   flashcard_id bigint,
-  action_type text,
+  action_type varchar(10),
   created_at timestamptz
 ) language plpgsql security definer as $$
 declare
@@ -16,6 +16,14 @@ declare
   v_log_id bigint;
   v_tag text;
 begin
+  -- Verify session exists before proceeding
+  if not exists (
+    select 1 
+    from public.generation_session 
+    where id = p_session_id
+  ) then
+    raise exception 'Generation session not found' using errcode = 'NTFND';
+  end if;
 
   begin
     -- If action is 'accepted' or 'edited', create a flashcard
@@ -67,7 +75,7 @@ begin
       created_at
     )
     values (
-      p_session_id::bigint,
+      p_session_id,
       v_flashcard_id,
       p_action_type,
       p_user_id::uuid,

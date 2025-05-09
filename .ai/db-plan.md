@@ -47,7 +47,7 @@ This table is managed by Supabase Auth.
 - **user_id**: UUID REFERENCES users(id) ON DELETE SET NULL
 - **generation_session_id**: BIGINT REFERENCES generation_session(id) ON DELETE SET NULL
 - **flashcard_id**: BIGINT REFERENCES flashcards(id) ON DELETE SET NULL
-- **action_type**: VARCHAR(10) NOT NULL CHECK (action_type IN ('accepted', 'edited', 'deleted'))
+- **action_type**: VARCHAR(10) NOT NULL CHECK (action_type IN ('accepted', 'edited', 'rejected'))
 - **created_at**: TIMESTAMPTZ NOT NULL DEFAULT NOW()
 
 ### 1.6. generation_error

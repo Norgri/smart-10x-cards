@@ -7,10 +7,10 @@ interface FlashcardsGridProps {
   sessionId: string;
   onAccept: (flashcard: GeneratedFlashcardDTO) => void;
   onEdit: (flashcard: GeneratedFlashcardDTO) => void;
-  onDelete: (flashcard: GeneratedFlashcardDTO) => void;
+  onReject: (flashcard: GeneratedFlashcardDTO) => void;
 }
 
-function FlashcardsGridComponent({ flashcards, sessionId, onAccept, onEdit, onDelete }: FlashcardsGridProps) {
+function FlashcardsGridComponent({ flashcards, sessionId, onAccept, onEdit, onReject }: FlashcardsGridProps) {
   const handleAccept = useCallback(
     (flashcard: GeneratedFlashcardDTO) => {
       onAccept(flashcard);
@@ -25,11 +25,11 @@ function FlashcardsGridComponent({ flashcards, sessionId, onAccept, onEdit, onDe
     [onEdit]
   );
 
-  const handleDelete = useCallback(
+  const handleReject = useCallback(
     (flashcard: GeneratedFlashcardDTO) => {
-      onDelete(flashcard);
+      onReject(flashcard);
     },
-    [onDelete]
+    [onReject]
   );
 
   if (flashcards.length === 0) {
@@ -48,7 +48,7 @@ function FlashcardsGridComponent({ flashcards, sessionId, onAccept, onEdit, onDe
             flashcard={flashcard}
             onAccept={() => handleAccept(flashcard)}
             onEdit={() => handleEdit(flashcard)}
-            onDelete={() => handleDelete(flashcard)}
+            onReject={() => handleReject(flashcard)}
           />
         </div>
       ))}
