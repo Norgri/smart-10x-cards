@@ -126,7 +126,7 @@ Poniżej znajdują się historyjki użytkowników opisujące interakcje z aplika
     *   Maksymalnie 4 tagi mogą być przypisane do fiszki.
     *   Po zapisaniu zmian fiszka jest zapisywana/aktualizowana w bazie danych użytkownika.
     *   Akcja "Edytuj" (rozumiana jako zapisanie po edycji) jest logowana w systemie do celów analitycznych.
-    *   Edytowana fiszka wizualnie zmienia swój stan lub znika z listy "do weryfikacji".
+    *   Akcja "Edytuj" (rozumiana jako zapisanie po edycji) powoduje zniknięcie fiszki z listy "do weryfikacji".
 
 ---
 

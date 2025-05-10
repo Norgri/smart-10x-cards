@@ -119,6 +119,15 @@ export interface LogActionDTO {
   timestamp: string; // Represents when the action was logged
 }
 
+/**
+ * EditFlashcardValidation represents validation rules for editing a flashcard.
+ */
+export interface EditFlashcardValidation {
+  maxTags: number;
+  maxTagLength: number;
+  requiredFields: (keyof Pick<GeneratedFlashcardDTO, "front" | "back">)[];
+}
+
 // Auth API Types
 export interface AuthResponse {
   user: {

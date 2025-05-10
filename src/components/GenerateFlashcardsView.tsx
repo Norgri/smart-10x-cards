@@ -137,7 +137,11 @@ export function GenerateFlashcardsView() {
   }, [selectedFile]);
 
   const handleFlashcardAction = useCallback(
-    async (flashcard: GeneratedFlashcardDTO, actionType: LogFlashcardActionCommand["actionType"]) => {
+    async (
+      flashcard: GeneratedFlashcardDTO,
+      actionType: LogFlashcardActionCommand["actionType"],
+      originalFlashcard?: GeneratedFlashcardDTO
+    ) => {
       if (!state.sessionId) return;
 
       try {
@@ -153,19 +157,43 @@ export function GenerateFlashcardsView() {
         });
 
         if (!response.ok) {
-          throw new Error("Failed to process flashcard action. Please try again.");
-        }
+          let errorMessage = "Failed to process flashcard action. Please try again.";
 
-        // Remove the flashcard from the list if it was rejected or accepted
-        if (actionType === "rejected" || actionType === "accepted") {
-          setState((prev) => ({
-            ...prev,
-            flashcards: prev.flashcards.filter((f) => f !== flashcard),
-          }));
+          try {
+            const errorData = await response.json();
+            if (errorData?.message) {
+              errorMessage = errorData.message;
+            } else {
+              switch (response.status) {
+                case 400:
+                  errorMessage =
+                    actionType === "edited"
+                      ? "Invalid flashcard data. Please check your input and try again."
+                      : "Invalid request. Please try again.";
+                  break;
+                case 404:
+                  errorMessage = "Session not found. Please refresh the page and try again.";
+                  break;
+                case 429:
+                  errorMessage = "Too many requests. Please wait a moment and try again.";
+                  break;
+                case 500:
+                  errorMessage = "Server error. Please try again later.";
+                  break;
+              }
+            }
+          } catch {
+            // Use default error message if JSON parsing fails
+          }
 
-          // Announce action to screen readers
-          toast.success(`Flashcard ${actionType} successfully`);
+          throw new Error(errorMessage);
         }
+        const toRemove = actionType === "edited" && originalFlashcard ? originalFlashcard : flashcard;
+        setState((prev) => ({
+          ...prev,
+          flashcards: prev.flashcards.filter((f) => f !== toRemove),
+        }));
+        toast.success(`Flashcard ${actionType} successfully`);
       } catch (error) {
         const errorMessage = error instanceof Error ? error.message : "An unexpected error occurred";
         setState((prev) => ({
@@ -173,6 +201,8 @@ export function GenerateFlashcardsView() {
           error: errorMessage,
         }));
         toast.error(errorMessage);
+
+        // On edit failure, leave flashcards array unchanged (original card remains)
       }
     },
     [state.sessionId]
@@ -184,7 +214,8 @@ export function GenerateFlashcardsView() {
   );
 
   const handleEdit = useCallback(
-    (flashcard: GeneratedFlashcardDTO) => handleFlashcardAction(flashcard, "edited"),
+    (updatedFlashcard: GeneratedFlashcardDTO, originalFlashcard: GeneratedFlashcardDTO) =>
+      handleFlashcardAction(updatedFlashcard, "edited", originalFlashcard),
     [handleFlashcardAction]
   );
 

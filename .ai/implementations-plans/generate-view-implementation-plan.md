@@ -62,12 +62,14 @@ Widok będzie dostępny pod ścieżką `/generate`.
     - Edytuj: Przełączenie na tryb edycji
     - Odrzuć: Wywołanie API logujące akcję odrzucenia i fiszki z widoku (opcjonalne potwierdzenie)
   - onClick przycisków w trybie edycji:
-    - Zapisz: Wywołanie API logujące akcję edycji i usunięcie fiszki z widoku
+    - Zapisz: Wywołanie API logujące akcję edycji; w przypadku sukcesu, fiszka zostaje zaktualizowana i usunięta z listy do weryfikacji, natomiast w przypadku błędu, wyświetlany jest komponent Alert z komunikatem, a fiszka pozostaje w trybie edycji.
     - Anuluj: Anulowanie zmian i przełączenie na tryb odczytu
 - **Warunki walidacji:** 
   - Weryfikacja obecności wymaganych pól (front, back)
   - Maksymalnie 4 tagi
   - Walidacja przed wysłaniem akcji
+  - Formularz edycji powinien być pre-populowany bieżącymi danymi fiszki.
+  - Obsługa błędów: W przypadku nieudanego zapisu, wyświetlony zostanie Alert z komunikatem o błędzie.
 - **Typy:** Używa typu GeneratedFlashcardDTO oraz lokalnego stanu dla trybu edycji
 
 ## 5. Typy

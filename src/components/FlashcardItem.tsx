@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { GeneratedFlashcardDTO } from "../types";
+import type { GeneratedFlashcardDTO, EditFlashcardValidation } from "../types";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
 import { Badge } from "./ui/badge";
@@ -22,7 +22,7 @@ import {
 interface FlashcardItemProps {
   flashcard: GeneratedFlashcardDTO;
   onAccept: () => void;
-  onEdit: (updatedFlashcard: GeneratedFlashcardDTO) => void;
+  onEdit: (updatedFlashcard: GeneratedFlashcardDTO, originalFlashcard: GeneratedFlashcardDTO) => void;
   onReject: () => void;
 }
 
@@ -32,6 +32,48 @@ interface EditableFlashcard {
   phonetic: string;
   tags: string;
 }
+
+const FLASHCARD_VALIDATION: EditFlashcardValidation = {
+  maxTags: 4,
+  maxTagLength: 50,
+  requiredFields: ["front", "back"],
+};
+
+const validateFlashcard = (data: EditableFlashcard): { isValid: boolean; error: string | null } => {
+  // Validate required fields
+  for (const field of FLASHCARD_VALIDATION.requiredFields) {
+    if (!data[field]?.trim()) {
+      return {
+        isValid: false,
+        error: `${field.charAt(0).toUpperCase() + field.slice(1)} text is required`,
+      };
+    }
+  }
+
+  // Parse and validate tags
+  const tags = data.tags
+    .split(",")
+    .map((tag) => tag.trim())
+    .filter(Boolean);
+
+  if (tags.length > FLASHCARD_VALIDATION.maxTags) {
+    return {
+      isValid: false,
+      error: `Maximum ${FLASHCARD_VALIDATION.maxTags} tags are allowed`,
+    };
+  }
+
+  // Validate tag length
+  const invalidTags = tags.filter((tag) => tag.length > FLASHCARD_VALIDATION.maxTagLength);
+  if (invalidTags.length > 0) {
+    return {
+      isValid: false,
+      error: `Tags must be shorter than ${FLASHCARD_VALIDATION.maxTagLength} characters: ${invalidTags.join(", ")}`,
+    };
+  }
+
+  return { isValid: true, error: null };
+};
 
 export function FlashcardItem({ flashcard, onAccept, onEdit, onReject }: FlashcardItemProps) {
   const [isEditing, setIsEditing] = useState(false);
@@ -45,29 +87,16 @@ export function FlashcardItem({ flashcard, onAccept, onEdit, onReject }: Flashca
 
   const handleSave = () => {
     try {
-      // Validate required fields
-      if (!editedData.front.trim() || !editedData.back.trim()) {
-        setError("Front and back text are required");
+      const validation = validateFlashcard(editedData);
+      if (!validation.isValid) {
+        setError(validation.error);
         return;
       }
 
-      // Parse and validate tags
       const tags = editedData.tags
         .split(",")
         .map((tag) => tag.trim())
         .filter(Boolean);
-
-      if (tags.length > 4) {
-        setError("Maximum 4 tags are allowed");
-        return;
-      }
-
-      // Validate tag length
-      const invalidTags = tags.filter((tag) => tag.length > 50);
-      if (invalidTags.length > 0) {
-        setError(`Tags must be shorter than 50 characters: ${invalidTags.join(", ")}`);
-        return;
-      }
 
       // Create updated flashcard
       const updatedFlashcard: GeneratedFlashcardDTO = {
@@ -78,7 +107,7 @@ export function FlashcardItem({ flashcard, onAccept, onEdit, onReject }: Flashca
         tags,
       };
 
-      onEdit(updatedFlashcard);
+      onEdit(updatedFlashcard, flashcard);
       setIsEditing(false);
       setError(null);
       toast.success("Flashcard updated successfully");
