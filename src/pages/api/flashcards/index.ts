@@ -1,6 +1,6 @@
 import type { APIRoute } from "astro";
 import { z } from "zod";
-import type { CreateFlashcardCommand, FlashcardDTO } from "../../../types";
+import type { CreateFlashcardCommand } from "../../../types";
 import { FlashcardService } from "../../../lib/services/flashcard.service";
 
 /**

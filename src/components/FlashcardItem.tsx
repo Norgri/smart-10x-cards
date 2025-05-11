@@ -7,17 +7,7 @@ import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 import { Alert, AlertDescription } from "./ui/alert";
 import { toast } from "sonner";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "./ui/alert-dialog";
+import { ConfirmActionDialog } from "./ConfirmActionDialog";
 
 interface FlashcardItemProps {
   flashcard: GeneratedFlashcardDTO;
@@ -253,25 +243,15 @@ export function FlashcardItem({ flashcard, onAccept, onEdit, onReject }: Flashca
         </div>
       </CardContent>
       <CardFooter className="flex justify-end gap-2">
-        <AlertDialog>
-          <AlertDialogTrigger asChild>
-            <Button variant="outline" size="sm">
-              Reject
-            </Button>
-          </AlertDialogTrigger>
-          <AlertDialogContent>
-            <AlertDialogHeader>
-              <AlertDialogTitle>Reject this flashcard?</AlertDialogTitle>
-              <AlertDialogDescription>
-                This action cannot be undone. This flashcard will be marked as rejected and removed from the list.
-              </AlertDialogDescription>
-            </AlertDialogHeader>
-            <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
-              <AlertDialogAction onClick={onReject}>Reject</AlertDialogAction>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
+        <ConfirmActionDialog
+          title="Reject this flashcard?"
+          description="This action cannot be undone. This flashcard will be marked as rejected and removed from the list."
+          actionLabel="Reject"
+          triggerLabel="Reject"
+          triggerVariant="outline"
+          actionVariant="destructive"
+          onConfirm={onReject}
+        />
         <Button variant="outline" size="sm" onClick={() => setIsEditing(true)} aria-label="Edit flashcard">
           Edit
         </Button>

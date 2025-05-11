@@ -1,0 +1,15 @@
+---
+import { Toaster } from "sonner";
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{Astro.props.title || "Smart 10x Cards"}</title>
+  </head>
+  <body>
+    <slot />
+    <Toaster client:load richColors closeButton position="top-right" />
+  </body>
+</html>

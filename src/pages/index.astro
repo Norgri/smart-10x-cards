@@ -1,8 +1,8 @@
 ---
-import Welcome from "../components/Welcome.astro";
-import Layout from "../layouts/Layout.astro";
+import MainLayout from "../layouts/MainLayout.astro";
+import { DashboardPage } from "../components/DashboardPage";
 ---
 
-<Layout>
-  <Welcome />
-</Layout>
+<MainLayout title="Dashboard - Smart 10x Cards">
+  <DashboardPage client:load />
+</MainLayout>
