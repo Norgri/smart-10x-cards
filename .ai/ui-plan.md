@@ -20,7 +20,9 @@ Interfejs użytkownika Smart 10x Cards będzie oparty na nowoczesnych technologi
 - **Nazwa widoku:** Dashboard
 - **Ścieżka widoku:** `/dashboard`
 - **Główny cel:** Centralne miejsce, w którym użytkownik może przeglądać wszystkie swoje fiszki oraz zarządzać ich edycją in-place.
-- **Kluczowe informacje do wyświetlenia:** Lista fiszek prezentowana w formie gridu, liczba fiszek AI vs manualnych, powiadomienia o sesjach generowania, komunikaty o błędach podczas operacji (edycja, usunięcie, akceptacja).
+- **Kluczowe informacje do wyświetlenia:** 
+   - Lista fiszek prezentowana w formie gridu, liczba fiszek AI vs manualnych, powiadomienia o sesjach generowania, komunikaty o błędach podczas operacji (edycja, usunięcie, akceptacja).
+   - W przypadku braku fiszek, widok powinien przełączać się na widok 'empty state', w którym wyświetlony zostanie przyjazny komunikat (np. "You have no flashcards yet!"), uproszczona ilustracja oraz dwa przyciski CTA: jeden kierujący do formularza ręcznego dodawania fiszki ("Add Flashcard") oraz drugi umożliwiający przejście do widoku generacji fiszek AI ("Generate Flashcards").
 - **Kluczowe komponenty widoku:** Lista/karta z fiszkami z możliwością edycji in-place, przyciski akcji, pasek wyszukiwania/filter tagów, powiadomienia.
 - **UX, dostępność i względy bezpieczeństwa:** Responsywność, możliwość filtrowania/wyszukiwania fiszek, wsparcie dla klawiatury, natychmiastowa walidacja podczas edycji, potwierdzenie przed usunięciem, zabezpieczenie przed nieautoryzowanym dostępem.
 

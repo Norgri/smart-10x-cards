@@ -162,6 +162,7 @@ Poniżej znajdują się historyjki użytkowników opisujące interakcje z aplika
     *   Fiszki są prezentowane w czytelny sposób (np. lista, karty), pokazując kluczowe informacje (przód, tył).
     *   Przy każdej fiszce dostępne są opcje edycji i usunięcia (dla fiszek manualnych i zaakceptowanych/edytowanych AI).
     *   Widok może zawierać paginację, jeśli liczba fiszek jest duża.
+    *   Jeśli użytkownik nie posiada żadnych fiszek, widok Dashboard powinien wyświetlać przyjazny komunikat "Nie masz jeszcze fiszek" wraz z dwoma przyciskami CTA: "Dodaj fiszkę" (prowadzącym do formularza ręcznego tworzenia fiszki) oraz "Generuj fiszki" (przekierowującym do widoku generacji fiszek przez AI).
 
 ---
 
