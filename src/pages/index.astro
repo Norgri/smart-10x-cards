@@ -1,8 +1,8 @@
 ---
-import MainLayout from "../layouts/MainLayout.astro";
+import Layout from "../layouts/Layout.astro";
 import { DashboardPage } from "../components/DashboardPage";
 ---
 
-<MainLayout title="Dashboard - Smart 10x Cards">
-  <DashboardPage client:load />
-</MainLayout>
+<Layout title="Dashboard - Smart 10x Cards">
+  <DashboardPage client:only="react" />
+</Layout>

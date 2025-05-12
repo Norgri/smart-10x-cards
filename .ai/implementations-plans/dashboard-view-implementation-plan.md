@@ -14,7 +14,7 @@ Widok powinien być dostępny pod ścieżką:
 
 ## 3. Struktura komponentów
 - **DashboardPage** – główny kontener widoku.
-  - **ManualFlashcardForm** – formularz do tworzenia nowej fiszki.
+  - **ManualFlashcardForm** – formularz do tworzenia nowej fiszki, wywoływany poprzez modal otwierany po kliknięciu przycisku "Add Flashcard".
   - **SearchBar** – pole wyszukiwania oraz filtr tagów.
   - **DashboardFlashcardsGrid** – dedykowany komponent do wyświetlania listy manualnych fiszek. Wykorzystuje nowy komponent **DashboardFlashcardItem**.
   - **EmptyState** - Komponent prezentujący pusty stan widoku Dashboard.
@@ -27,11 +27,14 @@ Widok powinien być dostępny pod ścieżką:
 - **Obsługiwane interakcje:** 
   - Pobranie fiszek z API przy ładowaniu strony oraz po zmianie filtrów.
   - Aktualizacja listy po dodaniu, edycji lub usunięciu fiszki.
-  - Sprawdzanie, czy pobrana lista fiszek jest pusta. Jeśli tak, zamiast komponentu `DashboardFlashcardsGrid` renderowany jest komponent `EmptyState`, który wyświetla przyjazny komunikat, uproszczoną ilustrację oraz dwa przyciski CTA: "Add Flashcard" (do formularza ręcznego tworzenia fiszki) oraz "Generate Flashcards" (do widoku generacji fiszek AI).
+  - Sprawdzanie, czy pobrana lista fiszek jest pusta. Jeśli tak, zamiast komponentu `DashboardFlashcardsGrid` renderowany jest komponent `EmptyState`, który wyświetla przyjazny komunikat, uproszczoną ilustrację oraz dwa przyciski CTA: "Add Flashcard" (otwierający modal z formularzem ręcznego tworzenia fiszki) oraz "Generate Flashcards" (przekierowujący do widoku generacji fiszek AI).
 - **Typy i dane:** 
   - Używa typów z `FlashcardDTO`, `CreateFlashcardCommand` oraz `UpdateFlashcardCommand` z `types.ts`.
 - **Propsy:** 
   - Brak, gdyż jest stroną (widok samodzielny).
+- **Układ strony:**
+  - Nagłówek: zawiera pasek wyszukiwania (SearchBar) umieszczony po lewej oraz przycisk CTA "Add Flashcard" umieszczony po prawej. Kliknięcie tego przycisku otwiera modal z formularzem ręcznego tworzenia fiszki.
+  - Główna zawartość: poniżej nagłówka wyświetlana jest siatka fiszek (`DashboardFlashcardsGrid`). W przypadku braku fiszek, zamiast siatki renderowany jest komponent `EmptyState` z odpowiednimi przyciskami CTA.
 
 ### ManualFlashcardForm
 - **Opis:** Formularz do ręcznego dodawania nowej fiszki.

@@ -1,7 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 
-export function EmptyState() {
+interface EmptyStateProps {
+  onOpenFormDialog: () => void;
+}
+
+export function EmptyState({ onOpenFormDialog }: EmptyStateProps) {
   return (
     <Card className="p-8 text-center">
       <div className="mb-6">
@@ -25,7 +29,7 @@ export function EmptyState() {
         Get started by creating your first flashcard or generate them using AI.
       </p>
       <div className="flex justify-center gap-4">
-        <Button variant="default" onClick={() => document.getElementById("manual-flashcard-form")?.focus()}>
+        <Button variant="default" onClick={onOpenFormDialog}>
           Add Flashcard
         </Button>
         <Button variant="outline" onClick={() => (window.location.href = "/generate")}>

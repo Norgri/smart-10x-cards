@@ -5,7 +5,7 @@
 ### 1.1 Warstwa Frontendu (Astro oraz React)
 - Utworzymy dedykowane layouty:
   - `AuthLayout.astro` do stron związanych z autoryzacją (logowanie, rejestracja, odzyskiwanie hasła)
-  - `MainLayout.astro` dla pozostałych stron aplikacji (non-auth)
+  - `Layout.astro` dla pozostałych stron aplikacji (non-auth)
 - Strony związane z autentykacją umieścimy w katalogu `/src/pages/auth/`:
   - `login.astro` – strona logowania (US-002)
   - `register.astro` – strona rejestracji

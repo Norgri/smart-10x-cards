@@ -7,6 +7,9 @@ import { EmptyState } from "./EmptyState";
 import { Spinner } from "./ui/spinner";
 import { Alert, AlertDescription } from "./ui/alert";
 import { toast } from "sonner";
+import { Button } from "@/components/ui/button";
+import { PlusCircle } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 const MAX_RETRIES = 3;
 const RETRY_DELAY = 1000; // 1 second
@@ -19,6 +22,7 @@ export function DashboardPage() {
   const [error, setError] = useState<string | null>(null);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [retryCount, setRetryCount] = useState(0);
+  const [isFormDialogOpen, setIsFormDialogOpen] = useState(false);
 
   // Function to handle network errors with retries
   const handleNetworkError = useCallback(
@@ -32,6 +36,7 @@ export function DashboardPage() {
             (err instanceof TypeError && err.message.includes("failed to fetch")))
         ) {
           setRetryCount((prev) => prev + 1);
+          toast.info(`Connection issue detected. Retrying... (${retryCount + 1}/${MAX_RETRIES})`);
           await new Promise((resolve) => setTimeout(resolve, RETRY_DELAY * (retryCount + 1)));
           return handleNetworkError(operation, errorMessage);
         }
@@ -60,17 +65,41 @@ export function DashboardPage() {
         );
 
         if (!response.ok) {
-          throw new Error(
-            response.status === 429
-              ? "Too many requests. Please wait a moment and try again."
-              : "Failed to fetch flashcards. Please try again later."
-          );
+          let errorMessage = "Failed to fetch flashcards. Please try again later.";
+
+          try {
+            const errorData = await response.json();
+            if (errorData && errorData.message) {
+              errorMessage = errorData.message;
+            }
+          } catch {
+            // If JSON parsing fails, use status code based messages
+            errorMessage =
+              response.status === 429
+                ? "Too many requests. Please wait a moment and try again."
+                : response.status === 401
+                  ? "You are not authorized to view these flashcards. Please log in again."
+                  : response.status === 403
+                    ? "You don't have permission to access these flashcards."
+                    : response.status === 404
+                      ? "No flashcards found with the selected tags."
+                      : response.status >= 500
+                        ? "Server error. Our team has been notified."
+                        : errorMessage;
+          }
+
+          throw new Error(errorMessage);
         }
 
         const data = await response.json();
         setFlashcards(data);
-      } catch {
-        // Error is already handled by handleNetworkError
+      } catch (error) {
+        if (error instanceof Error) {
+          setError(error.message);
+        } else {
+          setError("An unexpected error occurred while fetching flashcards.");
+        }
+        // Error toast is handled by handleNetworkError
       } finally {
         setIsLoading(false);
       }
@@ -81,6 +110,8 @@ export function DashboardPage() {
 
   const handleAddFlashcard = async (newFlashcard: FlashcardDTO) => {
     setFlashcards((prev) => [...prev, newFlashcard]);
+    setIsFormDialogOpen(false);
+    toast.success("Flashcard created successfully");
   };
 
   const handleEditFlashcard = async (editedFlashcard: FlashcardDTO) => {
@@ -125,35 +156,88 @@ export function DashboardPage() {
     setSelectedTags(tags);
   };
 
+  const handleOpenFormDialog = () => {
+    setIsFormDialogOpen(true);
+  };
+
   return (
     <main className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-8">Your Flashcards</h1>
-
-      <section className="mb-8">
-        <ManualFlashcardForm onAdd={handleAddFlashcard} />
-      </section>
-
-      <section className="mb-8">
-        <SearchBar onTagsChange={handleTagsChange} selectedTags={selectedTags} />
-      </section>
-
-      {isLoading ? (
-        <div className="flex justify-center">
-          <Spinner className="h-8 w-8" />
+      <header className="mb-8">
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+          <h1 className="text-3xl font-bold">Your Flashcards</h1>
+          <Button onClick={handleOpenFormDialog} className="w-full md:w-auto">
+            <PlusCircle className="h-4 w-4 mr-2" />
+            Add Flashcard
+          </Button>
         </div>
-      ) : error ? (
-        <Alert variant="destructive" className="mb-4">
-          <AlertDescription>{error}</AlertDescription>
-        </Alert>
-      ) : flashcards.length === 0 ? (
-        <EmptyState />
-      ) : (
-        <DashboardFlashcardsGrid
-          flashcards={flashcards}
-          onEdit={handleEditFlashcard}
-          onDelete={handleDeleteFlashcard}
-        />
-      )}
+
+        <SearchBar onTagsChange={handleTagsChange} selectedTags={selectedTags} />
+      </header>
+
+      {/* Flashcard Form Dialog */}
+      <Dialog open={isFormDialogOpen} onOpenChange={setIsFormDialogOpen}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Create New Flashcard</DialogTitle>
+          </DialogHeader>
+          <ManualFlashcardForm onAdd={handleAddFlashcard} />
+        </DialogContent>
+      </Dialog>
+
+      {/* Content area with conditional rendering */}
+      <ContentContainer
+        isLoading={isLoading}
+        error={error}
+        flashcards={flashcards}
+        onOpenFormDialog={handleOpenFormDialog}
+        onEdit={handleEditFlashcard}
+        onDelete={handleDeleteFlashcard}
+      />
     </main>
   );
+}
+
+/**
+ * Renders the main content section based on application state
+ */
+function ContentContainer({
+  isLoading,
+  error,
+  flashcards,
+  onOpenFormDialog,
+  onEdit,
+  onDelete,
+}: {
+  isLoading: boolean;
+  error: string | null;
+  flashcards: FlashcardDTO[];
+  onOpenFormDialog: () => void;
+  onEdit: (flashcard: FlashcardDTO) => void;
+  onDelete: (id: number) => void;
+}) {
+  // Show loading state
+  if (isLoading) {
+    return (
+      <div className="flex justify-center">
+        <Spinner className="h-8 w-8" />
+      </div>
+    );
+  }
+
+  // Show error state
+  if (error) {
+    return (
+      <Alert variant="destructive" className="mb-4">
+        <AlertDescription>{error}</AlertDescription>
+      </Alert>
+    );
+  }
+
+  // Show empty state when no flashcards
+  if (flashcards.length === 0) {
+    return <EmptyState onOpenFormDialog={onOpenFormDialog} />;
+  }
+
+  // Show flashcards grid (default state)
+  return <DashboardFlashcardsGrid flashcards={flashcards} onEdit={onEdit} onDelete={onDelete} />;
 }
