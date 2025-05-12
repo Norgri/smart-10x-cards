@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import type { FlashcardDTO } from "../types";
+import type { FlashcardDTO, ListFlashcardsResponse } from "../types";
 import { ManualFlashcardForm } from "./ManualFlashcardForm";
 import { SearchBar } from "./SearchBar";
 import { DashboardFlashcardsGrid } from "./DashboardFlashcardsGrid";
@@ -91,8 +91,8 @@ export function DashboardPage() {
           throw new Error(errorMessage);
         }
 
-        const data = await response.json();
-        setFlashcards(data);
+        const responseData: ListFlashcardsResponse = await response.json();
+        setFlashcards(responseData.data);
       } catch (error) {
         if (error instanceof Error) {
           setError(error.message);

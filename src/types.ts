@@ -27,6 +27,14 @@ export interface FlashcardDTO {
 }
 
 /**
+ * ListFlashcardsResponse represents the full response from the API when retrieving a list of flashcards
+ */
+export interface ListFlashcardsResponse {
+  data: FlashcardDTO[];
+  total: number;
+}
+
+/**
  * CreateFlashcardCommand is used when creating a new manual flashcard.
  * It picks only the necessary fields from FlashcardDTO and adds the 'tags' field explicitly.
  */
