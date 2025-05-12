@@ -9,7 +9,7 @@ declare global {
     interface Locals {
       supabase: SupabaseClient<Database>;
       user: {
-        email: string | null;
+        email?: string;
         id: string;
       };
     }
