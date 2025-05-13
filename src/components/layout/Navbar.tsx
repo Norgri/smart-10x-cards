@@ -15,23 +15,28 @@ export default function Navbar({ user }: NavbarProps) {
 
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background">
-      <div className="container flex h-16 items-center">
-        <div className="mr-4 flex">
-          <a href="/" className="flex items-center space-x-2">
+      <div className="w-full flex h-16 items-center justify-between px-4 md:px-6 lg:px-8">
+        <div className="flex items-center">
+          <a href="/" className="flex items-center">
             <span className="font-bold text-xl">10x Cards</span>
           </a>
+
+          {/* Desktop navigation */}
+          <div className="ml-8 hidden md:flex">
+            <nav className="flex items-center space-x-6">
+              <NavItem href="/" label="Dashboard" isActive={isActive("/")} />
+              <NavItem href="/generate" label="Generowanie" isActive={isActive("/generate")} />
+            </nav>
+          </div>
         </div>
 
-        <div className="flex-1 hidden md:flex">
-          <nav className="flex items-center space-x-4 lg:space-x-6">
-            <NavItem href="/" label="Dashboard" isActive={isActive("/")} />
-            <NavItem href="/generate" label="Generowanie" isActive={isActive("/generate")} />
-          </nav>
-        </div>
+        <div className="flex items-center space-x-4">
+          {/* UserMenu visible only on desktop */}
+          <div className="hidden md:block">
+            <UserMenu user={user} onLogout={handleLogout} />
+          </div>
 
-        <div className="flex items-center justify-end space-x-4">
-          <UserMenu user={user} onLogout={handleLogout} />
-
+          {/* Mobile menu button */}
           <Button
             variant="ghost"
             className="md:hidden"

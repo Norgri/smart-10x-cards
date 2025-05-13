@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from "react";
-import { Avatar } from "../ui/avatar";
 import UserMenuOption from "./UserMenuOption";
 
 interface UserMenuProps {
@@ -30,15 +29,12 @@ export default function UserMenu({ user, onLogout }: UserMenuProps) {
   return (
     <div className="relative" ref={menuRef}>
       <button
-        className="flex items-center space-x-2 rounded-full p-1 hover:bg-accent"
+        className="flex items-center rounded-md px-3 py-2 text-sm font-medium hover:bg-accent transition-colors"
         onClick={toggleMenu}
         aria-expanded={isOpen}
         aria-haspopup="true"
       >
-        <Avatar className="h-8 w-8">
-          <span className="font-medium">{user.email ? user.email.charAt(0).toUpperCase() : "U"}</span>
-        </Avatar>
-        <span className="hidden md:inline-block text-sm font-medium">{user.email || "Użytkownik"}</span>
+        <span>{user.email || "Użytkownik"}</span>
       </button>
 
       {isOpen && (
