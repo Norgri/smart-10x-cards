@@ -6,8 +6,8 @@ import { useNavigation } from "../hooks/useNavigation";
 
 interface NavbarProps {
   user: { id: string; email: string | null };
-  onLogout: () => void;
-  currentPath: string;
+  onLogout?: () => void; // Opcjonalne
+  currentPath?: string; // Opcjonalne
 }
 
 export default function Navbar({ user }: NavbarProps) {

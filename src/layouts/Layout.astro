@@ -9,7 +9,6 @@ interface Props {
 
 const { title = "10x Astro Starter" } = Astro.props;
 const { user } = Astro.locals;
-const currentPath = Astro.url.pathname;
 
 // Ensure user has the expected shape
 const formattedUser = user
@@ -35,6 +34,7 @@ const formattedUser = user
       <slot />
     </main>
     <Toaster richColors closeButton position="top-right" client:load />
+    <script src="../scripts/layout.ts"></script>
   </body>
 </html>
 
@@ -50,35 +50,3 @@ const formattedUser = user
     padding: 1rem;
   }
 </style>
-
-<script>
-  // Handle logout functionality
-  document.addEventListener("astro:page-load", () => {
-    // Logout function
-    async function handleLogout() {
-      try {
-        const response = await fetch("/api/auth/logout", {
-          method: "POST",
-        });
-
-        if (response.ok) {
-          window.location.href = "/auth/login";
-        } else {
-          console.error("Logout failed");
-        }
-      } catch (error) {
-        console.error("Logout error:", error);
-      }
-    }
-
-    // Make the logout function globally available
-    // @ts-expect-error - handleNavbarLogout is defined in env.d.ts
-    window.handleNavbarLogout = handleLogout;
-
-    // Also handle logout button if present
-    const logoutBtn = document.querySelector("[data-logout]");
-    if (logoutBtn) {
-      logoutBtn.addEventListener("click", handleLogout);
-    }
-  });
-</script>
