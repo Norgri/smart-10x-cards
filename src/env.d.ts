@@ -14,6 +14,11 @@ declare global {
       };
     }
   }
+
+  // Add global handleNavbarLogout function to Window interface
+  interface Window {
+    handleNavbarLogout: () => Promise<void>;
+  }
 }
 
 interface ImportMetaEnv {
