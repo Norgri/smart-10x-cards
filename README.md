@@ -9,6 +9,7 @@
 - [Project Scope](#project-scope)
 - [Project Status](#project-status)
 - [License](#license)
+- [Testing](#testing)
 
 ## Project Name
 
@@ -24,6 +25,7 @@ Smart 10x Cards is a web application designed to automate and simplify the proce
 - **Backend:** Supabase (utilizing PostgreSQL and integrated user authentication)
 - **AI Integration:** OpenRouter for accessing various AI models
 - **CI/CD & Hosting:** GitHub Actions for continuous integration and DigitalOcean for deployment
+- **Testing:** Vitest and React Testing Library for unit/integration tests, Playwright for E2E testing
 
 ## Getting Started Locally
 
@@ -58,6 +60,8 @@ The following scripts are defined in the `package.json`:
 - **`npm run dev`**: Starts the development server.
 - **`npm run build`**: Builds the project for production deployment.
 - **`npm run preview`**: Serves the production build locally.
+- **`npm run test`**: Runs unit and integration tests with Vitest.
+- **`npm run test:e2e`**: Runs end-to-end tests with Playwright.
 - *(Additional scripts, such as testing or linting, may be available.)*
 
 ## Project Scope
@@ -81,3 +85,41 @@ The project is currently in the MVP stage and is under active development. Ongoi
 ## License
 
 This project is licensed under the MIT License.
+
+## Testing
+
+The project uses Vitest for unit and integration tests, and Playwright for E2E tests.
+
+### Unit & Integration Tests
+
+Run all tests once:
+```bash
+npm test
+```
+
+Run tests in watch mode during development:
+```bash
+npm run test:watch
+```
+
+Generate coverage report:
+```bash
+npm run test:coverage
+```
+
+### E2E Tests
+
+Run all E2E tests:
+```bash
+npm run test:e2e
+```
+
+Run E2E tests with UI:
+```bash
+npm run test:e2e:ui
+```
+
+If you haven't installed Playwright browsers yet, run:
+```bash
+npx playwright install
+```
