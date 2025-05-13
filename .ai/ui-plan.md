@@ -55,9 +55,9 @@ Interfejs użytkownika Smart 10x Cards będzie oparty na nowoczesnych technologi
 
 ## 4. Układ i struktura nawigacji
 
-- Główna nawigacja (navbar lub sidebar) będzie dostępna na wszystkich widokach po zalogowaniu.
-- Elementy nawigacyjne obejmują: Dashboard, Generowanie fiszek oraz Sesje generowania, a także ustawienia konta.
-- Nawigacja będzie responsywna – pasek boczny na większych ekranach oraz menu hamburgera na urządzeniach mobilnych.
+- Główna nawigacja (topbar) będzie dostępna na wszystkich widokach po zalogowaniu.
+- Elementy nawigacyjne obejmują: Dashboard, Sesje generowania, a także ustawienia konta.
+- Nawigacja będzie responsywna – pasek górny na większych ekranach oraz menu hamburgera na urządzeniach mobilnych.
 - Ważne linki i akcje będą wyposażone w odpowiednie etykiety ARIA, aby wspierać dostępność, oraz będą zabezpieczone przed nieautoryzowanym dostępem.
 
 ## 5. Kluczowe komponenty
