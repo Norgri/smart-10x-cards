@@ -59,7 +59,7 @@ export function LoginForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6" noValidate>
+    <form onSubmit={handleSubmit} className="space-y-6" noValidate data-testid="login-form">
       <div className="space-y-4">
         <div className="space-y-2">
           <Label htmlFor="email">Email</Label>
@@ -71,6 +71,7 @@ export function LoginForm() {
             placeholder="Wprowadź adres email"
             autoComplete="email"
             disabled={isLoading}
+            data-testid="email-input"
           />
         </div>
 
@@ -84,24 +85,25 @@ export function LoginForm() {
             placeholder="Wprowadź hasło"
             autoComplete="current-password"
             disabled={isLoading}
+            data-testid="password-input"
           />
         </div>
       </div>
 
       <div className="space-y-4">
-        <Button type="submit" className="w-full" disabled={isLoading}>
+        <Button type="submit" className="w-full" disabled={isLoading} data-testid="login-button">
           {isLoading ? "Logowanie..." : "Zaloguj się"}
         </Button>
 
         <div className="text-center text-sm">
-          <a href="/auth/forgot-password" className="text-primary hover:underline">
+          <a href="/auth/forgot-password" className="text-primary hover:underline" data-testid="forgot-password-link">
             Zapomniałeś hasła?
           </a>
         </div>
 
         <div className="text-center text-sm">
           Nie masz jeszcze konta?{" "}
-          <a href="/auth/register" className="text-primary hover:underline">
+          <a href="/auth/register" className="text-primary hover:underline" data-testid="register-link">
             Zarejestruj się
           </a>
         </div>

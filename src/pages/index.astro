@@ -4,5 +4,7 @@ import { DashboardPage } from "../components/DashboardPage";
 ---
 
 <Layout title="Dashboard - Smart 10x Cards">
-  <DashboardPage client:only="react" />
+  <div data-testid="dashboard-page-container">
+    <DashboardPage client:only="react" />
+  </div>
 </Layout>

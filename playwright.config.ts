@@ -1,4 +1,19 @@
 import { defineConfig, devices } from "@playwright/test";
+import path from "path";
+import dotenv from "dotenv";
+
+// Ładowanie zmiennych środowiskowych z pliku .env.test
+dotenv.config({ path: path.resolve(process.cwd(), ".env.test") });
+
+export interface Credentials {
+  user: string;
+  password: string;
+}
+
+export const credentials: Credentials = {
+  user: process.env.E2E_USERNAME ?? "",
+  password: process.env.E2E_PASSWORD ?? "",
+};
 
 export default defineConfig({
   testDir: "./e2e",

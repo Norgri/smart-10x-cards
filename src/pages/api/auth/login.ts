@@ -26,7 +26,7 @@ export const POST: APIRoute = async ({ request, cookies }) => {
     return new Response(
       JSON.stringify({
         user: data.user,
-        redirectTo: "/generate",
+        redirectTo: "/",
       }),
       { status: 200 }
     );

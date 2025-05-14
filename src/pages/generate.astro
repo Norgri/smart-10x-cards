@@ -7,13 +7,13 @@ const { user } = Astro.locals;
 ---
 
 <Layout title="Generate Flashcards">
-  <main class="container mx-auto px-4 py-8">
+  <main class="container mx-auto px-4 py-8" data-testid="generate-page">
     <div class="flex justify-between items-center mb-8">
-      <h1 class="text-4xl font-bold">Generate Flashcards</h1>
-      <div class="text-sm text-gray-600">
+      <h1 class="text-4xl font-bold" data-testid="generate-page-title">Generate Flashcards</h1>
+      <div class="text-sm text-gray-600" data-testid="user-info">
         Zalogowano jako: {user?.email}
       </div>
     </div>
-    <GenerateFlashcardsView client:load />
+    <GenerateFlashcardsView client:load data-testid="generate-flashcards-component" />
   </main>
 </Layout>

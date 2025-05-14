@@ -161,10 +161,12 @@ export function DashboardPage() {
   };
 
   return (
-    <main className="container mx-auto px-4 py-8">
+    <main className="container mx-auto px-4 py-8" data-testid="dashboard-content">
       <header className="mb-8">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
-          <h1 className="text-3xl font-bold">Your Flashcards</h1>
+          <h1 className="text-3xl font-bold" data-testid="dashboard-title">
+            Your Flashcards
+          </h1>
           <Button onClick={handleOpenFormDialog} className="w-full md:w-auto">
             <PlusCircle className="h-4 w-4 mr-2" />
             Add Flashcard
