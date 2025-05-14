@@ -5,3 +5,7 @@
 # Ignore learning notes
 .notes/
 
+# environment variables
+.env
+.env.production
+.env.test
