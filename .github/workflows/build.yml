@@ -1,15 +1,42 @@
-name: Hello World Workflow
+name: CI/CD Pipeline
 
 on:
   push:
     branches: [ master ]
-  pull_request:
-    branches: [ master ]
+  workflow_dispatch:
 
 jobs:
-  hello:
+  validate:
+    name: Lint, Test & Build
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    
     steps:
-      - uses: actions/checkout@v4
-      - name: Say Hello
-        run: echo "Hello, GitHub Actions!"
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Lint
+        run: npm run lint:fix
+      
+      - name: Run tests
+        run: npm run test
+      
+      - name: Build application
+        run: npm run build
+      
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: build
+          path: dist/
+          retention-days: 1 
