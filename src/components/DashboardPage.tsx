@@ -115,24 +115,10 @@ export function DashboardPage() {
   };
 
   const handleEditFlashcard = async (editedFlashcard: FlashcardDTO) => {
-    try {
-      await handleNetworkError(
-        () =>
-          fetch(`/api/flashcards/${editedFlashcard.id}`, {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(editedFlashcard),
-          }),
-        "Failed to update flashcard. Please check your connection and try again."
-      );
-
-      setFlashcards((prev) => prev.map((card) => (card.id === editedFlashcard.id ? editedFlashcard : card)));
-      toast.success("Flashcard updated successfully");
-    } catch {
-      // Error is already handled by handleNetworkError
-    }
+    // The API call is already handled by DashboardFlashcardItem component
+    // Just update the local state with the edited flashcard
+    setFlashcards((prev) => prev.map((card) => (card.id === editedFlashcard.id ? editedFlashcard : card)));
+    toast.success("Flashcard updated successfully");
   };
 
   const handleDeleteFlashcard = async (id: number) => {

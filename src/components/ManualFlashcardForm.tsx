@@ -27,6 +27,9 @@ export function ManualFlashcardForm({ onAdd }: ManualFlashcardFormProps) {
     tags: [],
   });
 
+  // Add a state to track the raw tag input for better UX
+  const [tagInput, setTagInput] = useState("");
+
   const validateForm = (): boolean => {
     const errors: Record<string, string> = {};
 
@@ -85,12 +88,19 @@ export function ManualFlashcardForm({ onAdd }: ManualFlashcardFormProps) {
 
     try {
       setIsSubmitting(true);
+
+      // Ensure tags are properly formatted before sending to API
+      const flashcardData = {
+        ...formData,
+        tags: formData.tags.filter((tag) => tag.trim() !== ""),
+      };
+
       const response = await fetch("/api/flashcards", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(flashcardData),
       });
 
       if (!response.ok) {
@@ -108,6 +118,7 @@ export function ManualFlashcardForm({ onAdd }: ManualFlashcardFormProps) {
         phonetic: null,
         tags: [],
       });
+      setTagInput("");
       setFormErrors({});
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Failed to create flashcard");
@@ -117,10 +128,16 @@ export function ManualFlashcardForm({ onAdd }: ManualFlashcardFormProps) {
   };
 
   const handleTagsChange = (value: string) => {
+    setTagInput(value);
+
+    // Split by commas and properly clean the tags
     const tags = value
       .split(",")
       .map((tag) => tag.trim())
-      .filter(Boolean);
+      .filter(Boolean)
+      .slice(0, MAX_TAGS); // Ensure we don't exceed max tags
+
+    // Update form data with the parsed tags array
     setFormData((prev) => ({ ...prev, tags }));
 
     // Clear tag error when user makes changes
@@ -223,7 +240,7 @@ export function ManualFlashcardForm({ onAdd }: ManualFlashcardFormProps) {
         <Input
           id="tags"
           placeholder="Enter tags, separated by commas"
-          value={formData.tags.join(", ")}
+          value={tagInput}
           onChange={(e) => handleTagsChange(e.target.value)}
           className={formErrors.tags ? "border-destructive" : ""}
           aria-invalid={!!formErrors.tags}
@@ -234,7 +251,9 @@ export function ManualFlashcardForm({ onAdd }: ManualFlashcardFormProps) {
             {formErrors.tags}
           </p>
         )}
-        <p className="text-xs text-muted-foreground">Each tag must be less than {MAX_TAG_LENGTH} characters.</p>
+        <p className="text-xs text-muted-foreground">
+          Each tag must be less than {MAX_TAG_LENGTH} characters. Use commas (,) to separate tags.
+        </p>
       </div>
 
       <Button type="submit" disabled={isSubmitting} className="w-full">

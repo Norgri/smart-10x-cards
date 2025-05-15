@@ -57,7 +57,6 @@ export function DashboardFlashcardItem({ flashcard, onEdit, onDelete }: Dashboar
       const updatedFlashcard = await response.json();
       onEdit(updatedFlashcard);
       setIsEditing(false);
-      toast.success("Flashcard updated successfully");
     } catch (error) {
       toast.error(error instanceof Error ? error.message : "Failed to update flashcard");
     } finally {
