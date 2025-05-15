@@ -19,6 +19,7 @@ interface DashboardFlashcardItemProps {
 export function DashboardFlashcardItem({ flashcard, onEdit, onDelete }: DashboardFlashcardItemProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [tagsInput, setTagsInput] = useState(flashcard.tags.join(", "));
   const [editData, setEditData] = useState<UpdateFlashcardCommand>({
     id: flashcard.id,
     front: flashcard.front,
@@ -65,10 +66,12 @@ export function DashboardFlashcardItem({ flashcard, onEdit, onDelete }: Dashboar
   };
 
   const handleTagsChange = (value: string) => {
+    setTagsInput(value);
     const tags = value
       .split(",")
       .map((tag) => tag.trim())
-      .filter(Boolean);
+      .filter(Boolean)
+      .slice(0, 4); // Ensure we don't exceed 4 tags
     setEditData((prev) => ({ ...prev, tags }));
   };
 
@@ -112,7 +115,7 @@ export function DashboardFlashcardItem({ flashcard, onEdit, onDelete }: Dashboar
             <Label htmlFor={`tags-${flashcard.id}`}>Tags (comma separated, max 4)</Label>
             <Input
               id={`tags-${flashcard.id}`}
-              value={editData.tags.join(", ")}
+              value={tagsInput}
               onChange={(e) => handleTagsChange(e.target.value)}
               placeholder="Enter tags"
             />
