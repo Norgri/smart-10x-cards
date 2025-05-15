@@ -6,7 +6,7 @@ interface UseNavigationResult {
   toggleMobileMenu: () => void;
   closeMobileMenu: () => void;
   isActive: (path: string) => boolean;
-  handleLogout: () => void;
+  handleLogout: () => Promise<void>;
 }
 
 /**
@@ -43,14 +43,23 @@ export function useNavigation(): UseNavigationResult {
   };
 
   /**
-   * Logout handler that calls the global logout function
-   * Defined in Layout.astro
+   * Logout handler that calls the logout API endpoint
    */
-  const handleLogout = () => {
-    // Call the global logout function defined in Layout.astro
-    if (typeof window !== "undefined" && window.handleNavbarLogout) {
-      // @ts-expect-error - handleNavbarLogout is defined in Layout.astro
-      window.handleNavbarLogout();
+  const handleLogout = async (): Promise<void> => {
+    try {
+      const response = await fetch("/api/auth/logout", {
+        method: "POST",
+      });
+
+      if (response.ok) {
+        if (typeof window !== "undefined") {
+          window.location.replace("/auth/login");
+        }
+      } else {
+        console.error("Logout failed");
+      }
+    } catch (error) {
+      console.error("Logout error:", error);
     }
   };
 
