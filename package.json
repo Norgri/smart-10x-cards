@@ -21,6 +21,7 @@
     "test:e2e:report": "playwright show-report"
   },
   "dependencies": {
+    "@astrojs/node": "^9.2.1",
     "@astrojs/react": "4.2.2",
     "@astrojs/sitemap": "3.3.0",
     "@radix-ui/react-alert-dialog": "^1.1.13",
