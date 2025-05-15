@@ -23,24 +23,55 @@ export class FlashcardService {
     limit: number,
     tags?: string[]
   ): Promise<{ data: FlashcardDTO[]; total: number }> {
-    // Calculate offset based on page and limit
     const offset = (page - 1) * limit;
 
-    // Start building the query
+    let flashcardIdsToFilterBy: number[] | undefined = undefined;
+
+    if (tags && tags.length > 0) {
+      // Step 1: Fetch flashcard_ids that match the tags for the current user.
+      // RLS on `tags` table (via `flashcards`) ensures we only get tags for user's flashcards.
+      const { data: matchingTagEntries, error: tagsError } = await this.supabase
+        .from("tags")
+        .select("flashcard_id")
+        .in("tag", tags);
+
+      if (tagsError) {
+        console.error("Error fetching flashcard IDs by tags:", tagsError);
+        throw new Error(`Failed to fetch flashcard IDs by tags: ${tagsError.message}`);
+      }
+
+      if (!matchingTagEntries || matchingTagEntries.length === 0) {
+        // If specific tags are requested and no flashcards have these tags, return empty.
+        return { data: [], total: 0 };
+      }
+      // Get unique flashcard_ids that have at least one of the matching tags
+      flashcardIdsToFilterBy = [...new Set(matchingTagEntries.map((t) => t.flashcard_id))];
+
+      if (flashcardIdsToFilterBy.length === 0) {
+        // This case should ideally be covered by the check above, but as a safeguard:
+        return { data: [], total: 0 };
+      }
+    }
+
+    // Step 2: Fetch the actual flashcards
+    // Start building the main query for flashcards
     let query = this.supabase
       .from("flashcards")
-      .select("*, tags!inner(*)", { count: "exact" })
-      .eq("user_id", userId)
-      .range(offset, offset + limit - 1);
+      .select("*, tags(*)", { count: "exact" }) // Select ALL tags for matched flashcards
+      .eq("user_id", userId);
 
-    // Add tag filtering if tags are provided
-    if (tags && tags.length > 0) {
-      query = query.in("tags.tag", tags);
+    // If we have specific flashcard IDs from tag filtering, apply them
+    if (flashcardIdsToFilterBy) {
+      query = query.in("id", flashcardIdsToFilterBy);
     }
+
+    // Apply pagination
+    query = query.range(offset, offset + limit - 1);
 
     const { data, error, count } = await query;
 
     if (error) {
+      console.error("Error fetching flashcards:", error);
       throw new Error(`Failed to fetch flashcards: ${error.message}`);
     }
 
